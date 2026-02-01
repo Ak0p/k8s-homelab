@@ -10,7 +10,7 @@ parameters:
   compression: "lz4"
   dedup: "off"
   fstype: "zfs"
-  poolname: "zfspv-pool"
+  poolname: "tank"
 ---
 # Storage class for file storage (documents, photos, videos, etc)
 apiVersion: storage.k8s.io/v1
@@ -26,4 +26,4 @@ parameters:
   dedup: "off"
   fstype: "zfs"
   shared: "yes" # to enable ReadWriteMany access mode
-  poolname: "zfspv-pool"
+  poolname: "tank"
