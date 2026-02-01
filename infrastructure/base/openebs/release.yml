@@ -26,36 +26,39 @@ spec:
         mayastor:
           enabled: false
     loki:
-      enabled: true
+      enabled: false
 
       localpvScConfig:
-        loki:
-          basePath: "/var/openebs/local/localpv-hostpath/loki"
+        enabled: false
+      #   loki:
+      #     basePath: "/var/openebs/local/localpv-hostpath/loki"
 
-      loki:
-        schemaConfig:
-          configs:
-            - from: 2024-04-01
-              store: tsdb
-              object_store: filesystem
-              schema: v13
-              index:
-                prefix: loki_index_
-                period: 24h
-        commonConfig:
-          replication_factor: 1
-        storage:
-          type: filesystem
+      # loki:
+      #   schemaConfig:
+      #     configs:
+      #       - from: 2024-04-01
+      #         store: tsdb
+      #         object_store: filesystem
+      #         schema: v13
+      #         index:
+      #           prefix: loki_index_
+      #           period: 24h
+      #   commonConfig:
+      #     replication_factor: 1
+      #   storage:
+      #     type: filesystem
 
-      singleBinary:
-        replicas: 1
-        drivesPerNode: 1
-        persistence:
-          enabled: true
+      # singleBinary:
+      #   replicas: 1
+      #   drivesPerNode: 1
+      #   persistence:
+      #     enabled: true
 
       minio:
         enabled: false
 
-    localpv-provisioner:
-      localpv: 
-        basePath: "/var/local/openebs"
+    # localpv-provisioner:
+    #   localpv: 
+    #     basePath: "/var/local/openebs"
+
+      
