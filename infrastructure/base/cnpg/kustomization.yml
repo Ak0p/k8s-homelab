@@ -1,0 +1,5 @@
+resources:
+  - namespace.yml
+  - cluster-release.yml
+  - operator-release.yml
+  - repository.yml
