@@ -8,5 +8,3 @@ spec:
   interval: 1h
   type: oci
   url: oci://registry-1.docker.io/bitnamicharts/redis
-  ref:
-    semver: ">= 24.1.2"
