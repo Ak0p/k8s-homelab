@@ -1,0 +1,5 @@
+resources:
+  - release.yml
+  - namespace.yml
+  - repository.yml
+

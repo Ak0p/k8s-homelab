@@ -1,2 +1,4 @@
 resources:
   - ./openebs
+  - ./postgres
+  - ./redis
