@@ -10,5 +10,5 @@ spec:
       storage: 100GiB
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   
