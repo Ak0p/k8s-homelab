@@ -14,9 +14,10 @@ spec:
         name: immich
   interval: 5m
   values:
-    persistence:
-      library:
-        existingClaim: immich
+    immich:
+      persistence:
+        library:
+          existingClaim: immich
     controllers:
       main:
         containers:
