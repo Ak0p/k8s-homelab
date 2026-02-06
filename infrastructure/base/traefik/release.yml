@@ -21,3 +21,5 @@ spec:
       dashboard:
         enabled: true
         matchRule: Host(`traefik.akop.ro`)
+        entrypoints:
+          - web
