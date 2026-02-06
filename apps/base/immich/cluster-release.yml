@@ -3,7 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: immich
-  namespace: database
+  namespace: immich
 spec:
   interval: 5m
   chart:
@@ -30,4 +30,3 @@ spec:
             # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
             - CREATE EXTENSION vchord CASCADE;
             - CREATE EXTENSION earthdistance CASCADE;
-          
