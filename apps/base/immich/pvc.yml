@@ -7,7 +7,7 @@ spec:
   storageClassName: host-zfs-files
   resources:
     requests:
-      storage: 100GiB
+      storage: 100Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
