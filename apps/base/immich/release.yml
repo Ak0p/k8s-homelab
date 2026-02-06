@@ -1,0 +1,22 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich
+  namespace: immich
+spec:
+  interval: 5m
+  chartRef:
+    version: ">= 0.10.3"
+    kind: OCIRepository
+    name: immich
+  values:
+    persistence:
+      library:
+        existingClaim: immich
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              tag: v2.5.2

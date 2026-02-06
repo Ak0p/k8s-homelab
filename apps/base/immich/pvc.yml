@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich
+  namespace: immich
+spec:
+  storageClassName: host-zfs-files
+  resources:
+    requests:
+      storage: 100GiB
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  
