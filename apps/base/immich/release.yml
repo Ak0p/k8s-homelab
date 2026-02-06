@@ -5,11 +5,14 @@ metadata:
   name: immich
   namespace: immich
 spec:
+  chart:
+    spec:
+      chart: immich
+      version: ">= 0.10.3"
+      sourceRef:
+        kind: HelmRepository
+        name: immich
   interval: 5m
-  chartRef:
-    version: ">= 0.10.3"
-    kind: OCIRepository
-    name: immich
   values:
     persistence:
       library:
