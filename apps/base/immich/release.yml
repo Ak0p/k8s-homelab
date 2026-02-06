@@ -24,3 +24,5 @@ spec:
           main:
             image:
               tag: v2.5.2
+    valkey:
+      enabled: true
