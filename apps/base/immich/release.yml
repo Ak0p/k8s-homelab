@@ -24,5 +24,11 @@ spec:
           main:
             image:
               tag: v2.5.2
+            env:
+              DB_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-cluster-app
+                    key: fqdn-uri
     valkey:
       enabled: true
