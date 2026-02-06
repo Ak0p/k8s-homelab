@@ -8,9 +8,9 @@ spec:
   interval: 5m
   chart:
     spec:
-      chart: chart-name
-      version: chart-version
+      chart: metallb
+      version: " >= 0.15.3"
       sourceRef:
         kind: HelmRepository
-        name: repo-name
-        namespace: flux-system
+        name: metallb
+        namespace: metallb-system
