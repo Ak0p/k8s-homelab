@@ -3,4 +3,4 @@ resources:
   - repository.yml
   - namespace.yml
   - pvc.yml
-  - immich-cluster-release.yml
+  - cluster-release.yml
