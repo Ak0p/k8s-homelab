@@ -15,4 +15,4 @@ spec:
         name: redis
   values:
     global:
-      storageClass: host-zfs-standard
+      defaultStorageClass: host-zfs-standard
