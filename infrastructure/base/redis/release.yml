@@ -16,3 +16,10 @@ spec:
   values:
     global:
       defaultStorageClass: host-zfs-standard
+    master:
+      persistence:
+        storageClass: host-zfs-standard
+    replica:
+      count: 1
+      persistence:
+        storageClass: host-zfs-standard
