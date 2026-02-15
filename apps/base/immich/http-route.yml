@@ -13,4 +13,5 @@ spec:
   rules:
     - backendRefs:
         - name: immich-server
+          namespace: immich
           port: 2283
