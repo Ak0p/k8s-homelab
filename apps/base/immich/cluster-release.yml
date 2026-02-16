@@ -24,9 +24,11 @@ spec:
       postgresql:
         shared_preload_libraries:
           - "vchord.so"
-      initdb:
-        database: immich
-        postInitApplicationSQL:
-          # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
-          - CREATE EXTENSION vchord CASCADE;
-          - CREATE EXTENSION earthdistance CASCADE;
+      bootstrap:
+        initdb:
+          database: immich
+          owner: immich
+          postInitApplicationSQL:
+            # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
+            - CREATE EXTENSION vchord CASCADE;
+            - CREATE EXTENSION earthdistance CASCADE;
