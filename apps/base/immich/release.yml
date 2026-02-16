@@ -28,7 +28,7 @@ spec:
               DB_URL:
                 valueFrom:
                   secretKeyRef:
-                    name: immich-cluster-app
+                    name: immich-cluster-superuser
                     key: fqdn-uri
     valkey:
       enabled: true
