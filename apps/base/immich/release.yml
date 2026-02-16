@@ -30,6 +30,5 @@ spec:
                   secretKeyRef:
                     name: immich-cluster-app
                     key: fqdn-uri
-              IMMICH_SERVER_URL: immich.akop.ro
     valkey:
       enabled: true
