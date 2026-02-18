@@ -39,12 +39,12 @@ spec:
               DB_USERNAME:
                 valueFrom:
                   secretKeyRef:
-                    name: immich-cluster-app
+                    name: immich-cluster-superuser
                     key: user
               DB_PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: immich-cluster-app
+                    name: immich-cluster-superuser
                     key: password
               DB_DATABASE_NAME:
                 valueFrom:
