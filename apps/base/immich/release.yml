@@ -25,10 +25,31 @@ spec:
             image:
               tag: v2.5.2
             env:
-              DB_URL:
+              # DB_URL:
+              #   valueFrom:
+              #     secretKeyRef:
+              #       name: immich-cluster-app
+              #       key: fqdn-uri
+              DB_HOSTNAME:
                 valueFrom:
                   secretKeyRef:
                     name: immich-cluster-app
-                    key: fqdn-uri
+                    key: host
+              DB_PORT: 5432
+              DB_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-cluster-app
+                    key: user
+              DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-cluster-app
+                    key: password
+              DB_DATABASE_NAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-cluster-app
+                    key: dbname
     valkey:
       enabled: true
