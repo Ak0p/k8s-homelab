@@ -29,8 +29,8 @@ spec:
         owner: immich
         postInitApplicationSQL:
           # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
-          - CREATE EXTENSION vchord CASCADE;
-          - CREATE EXTENSION earthdistance CASCADE;
+          # - CREATE EXTENSION vchord CASCADE;
+          # - CREATE EXTENSION earthdistance CASCADE;
       roles:
         - name: immich
           ensure: present
