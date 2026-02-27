@@ -21,9 +21,9 @@ spec:
       storage:
         size: 8Gi
         storageClass: host-zfs-standard
-      postgresql:
-        shared_preload_libraries:
-          - "vchord.so"
+      # postgresql:
+      #   shared_preload_libraries:
+      #     - "vchord.so"
       initdb:
         database: immich
         owner: immich
