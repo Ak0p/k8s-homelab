@@ -1,4 +1,4 @@
 resources:
-  - namespace.yml
-  - release.yml
-  - repository.yml
+  - ./immich
+  - ./radicale
+  - ./filebrowser
