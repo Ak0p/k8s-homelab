@@ -23,7 +23,7 @@ spec:
         containers:
           main:
             image:
-              tag: v1.137.3
+              tag: v2.5.2
             env:
               # DB_URL:
               #   valueFrom:
