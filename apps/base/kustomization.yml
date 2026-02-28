@@ -1,2 +1,4 @@
 resources:
-  - ./immich
+  - namespace.yml
+  - release.yml
+  - repository.yml
