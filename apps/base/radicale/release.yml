@@ -15,4 +15,5 @@ spec:
         name: radicale
         namespace: radicale
   values:
-    storageClass: host-zfs-files
+    storageClass:
+      - host-zfs-files
