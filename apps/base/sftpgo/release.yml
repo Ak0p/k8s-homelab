@@ -47,7 +47,7 @@ spec:
         namespace: sftpgo
         ingressClassName: traefik
         targetSelector:
-          sftpgo: main
+          main: main
         hosts:
           - host: files.akop.ro
             paths:
