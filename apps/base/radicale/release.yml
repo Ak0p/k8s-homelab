@@ -22,7 +22,7 @@ spec:
         retain: true
         accessModes: ReadWriteMany
         size: 2Gi
-        storageClass: zfs-host-files
+        storageClass: host-zfs-files
 
     # ingress:
     #   radicale:
