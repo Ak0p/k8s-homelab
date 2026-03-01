@@ -23,23 +23,6 @@ spec:
         accessModes: ReadWriteMany
         size: 2Gi
         storageClass: host-zfs-files
-    workload:
-      main:
-        podSpec:
-          initContainers:
-            fix-permissions:
-              enabled: true
-              type: init
-              image:
-                repository: busybox
-                tag: latest
-                pullPolicy: IfNotPresent
-              command: ["sh", "-c", "chown -R 2999:2999 /data"]
-              volumeMounts:
-                - name: data
-                  mountPath: /data
-              securityContext:
-                runAsUser: 0
     # ingress:
     #   radicale:
     #     enabled: true
