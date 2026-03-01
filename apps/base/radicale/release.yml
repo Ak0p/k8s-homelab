@@ -21,7 +21,6 @@ spec:
         type: pvc
         retain: true
         accessModes: ReadWriteMany
-        volumeName: radicale
         size: 2Gi
         storageClass: zfs-host-files
 
