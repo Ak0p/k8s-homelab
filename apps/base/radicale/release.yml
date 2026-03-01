@@ -17,6 +17,7 @@ spec:
   values:
     persistence:
       pvc-vol:
+        enabled: true
         type: pvc
         existingClaim: radicale
     # ingress:
