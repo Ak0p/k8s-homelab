@@ -16,10 +16,15 @@ spec:
         namespace: radicale
   values:
     persistence:
-      pvc-vol:
+      data:
         enabled: true
         type: pvc
-        existingClaim: radicale
+        retain: true
+        accessModes: ReadWriteMany
+        volumeName: radicale
+        size: 2Gi
+        storageClass: zfs-host-files
+
     # ingress:
     #   radicale:
     #     enabled: true

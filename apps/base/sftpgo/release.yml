@@ -15,7 +15,26 @@ spec:
         name: sftpgo
         namespace: sftpgo
   values:
-    storageClass:
-      host-zfs-files:
+    fallbackDefaults:
+      storageClass: zfs-host-files
+    persistence:
+      backupdirectory:
         enabled: true
-        provisioner: zfs.csi.openebs.io
+        type: pvc
+        accessModes: ReadWriteMany
+        size: 500Gi
+      configPath:
+        enabled: true
+        type: pvc
+        size: 500Mi
+      data:
+        enabled: true
+        type: pvc
+        retain: true
+        accessModes: ReadWriteMany
+        size: 500Gi
+      shareaccess:
+        enabled: true
+        type: pvc
+        accessModes: ReadWriteMany
+        size: 100Gi
