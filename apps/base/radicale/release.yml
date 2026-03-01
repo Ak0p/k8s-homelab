@@ -29,7 +29,8 @@ spec:
           initContainers:
             fix-permissions:
               enabled: true
-              image: busybox
+              type: init
+              imageSelector: busybox
               command: ["sh", "-c", "chown -R 2999:2999 /data"]
               volumeMounts:
                 - name: data
