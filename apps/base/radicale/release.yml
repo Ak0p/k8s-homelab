@@ -27,7 +27,8 @@ spec:
       main:
         podSpec:
           initContainers:
-            - name: fix-permissions
+            fix-permissions:
+              enabled: true
               image: busybox
               command: ["sh", "-c", "chown -R 2999:2999 /data"]
               volumeMounts:
