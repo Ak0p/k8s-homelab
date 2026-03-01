@@ -23,7 +23,7 @@ spec:
         type: pvc
         accessModes: ReadWriteMany
         size: 500Gi
-      configPath:
+      configpath:
         enabled: true
         type: pvc
         size: 500Mi
