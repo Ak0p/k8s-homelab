@@ -30,7 +30,10 @@ spec:
             fix-permissions:
               enabled: true
               type: init
-              imageSelector: busybox
+              image:
+                repository: busybox
+                tag: latest
+                pullPolicy: IfNotPresent
               command: ["sh", "-c", "chown -R 2999:2999 /data"]
               volumeMounts:
                 - name: data
