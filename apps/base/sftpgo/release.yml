@@ -16,7 +16,7 @@ spec:
         namespace: sftpgo
   values:
     fallbackDefaults:
-      storageClass: zfs-host-files
+      storageClass: host-zfs-files
     persistence:
       backupdirectory:
         enabled: true
