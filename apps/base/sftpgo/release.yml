@@ -47,6 +47,11 @@ spec:
         ingressClassName: traefik
         targetSelector:
           sftpgo: 2221
+        hosts:
+          - host: files.akop.ro
+            paths:
+              - path: /
+                pathType: Prefix
         integrations:
           traefik:
             enabled: true
