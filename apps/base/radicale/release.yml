@@ -19,3 +19,15 @@ spec:
       pvc-vol:
         type: pvc
         existingClaim: radicale
+    # ingress:
+    #   radicale:
+    #     enabled: true
+    #     primary: true
+    #     ingressClassName: traefik
+    #     targetSelector:
+    #       radicale: 80
+    #     integrations:
+    #       traefik:
+    #         enabled: true
+    #         entrypoints:
+    #           - web
