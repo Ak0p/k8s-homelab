@@ -15,16 +15,6 @@ spec:
         name: radicale
         namespace: radicale
   values:
-    securityContext:
-      container:
-        runAsUser: 0
-        runAsGroup: 0
-        runAsNonRoot: false
-        capabilities:
-          add: []
-          drop: []
-      pod:
-        fsGroup: 0
     persistence:
       data:
         enabled: true
@@ -33,7 +23,18 @@ spec:
         accessModes: ReadWriteMany
         size: 2Gi
         storageClass: host-zfs-files
-
+    workload:
+      main:
+        podSpec:
+          initContainers:
+            - name: fix-permissions
+              image: busybox
+              command: ["sh", "-c", "chown -R 2999:2999 /data"]
+              volumeMounts:
+                - name: data
+                  mountPath: /data
+              securityContext:
+                runAsUser: 0
     # ingress:
     #   radicale:
     #     enabled: true

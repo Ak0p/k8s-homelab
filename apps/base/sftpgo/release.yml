@@ -15,26 +15,28 @@ spec:
         name: sftpgo
         namespace: sftpgo
   values:
-    fallbackDefaults:
-      storageClass: host-zfs-files
     persistence:
       backupdirectory:
         enabled: true
         type: pvc
         accessModes: ReadWriteMany
         size: 500Gi
+        storageClass: host-zfs-files
       configpath:
         enabled: true
         type: pvc
         size: 500Mi
+        storageClass: host-zfs-files
       data:
         enabled: true
         type: pvc
         retain: true
         accessModes: ReadWriteMany
         size: 500Gi
+        storageClass: host-zfs-files
       shareaccess:
         enabled: true
         type: pvc
         accessModes: ReadWriteMany
         size: 100Gi
+        storageClass: host-zfs-files
