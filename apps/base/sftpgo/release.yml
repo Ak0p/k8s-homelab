@@ -2,8 +2,8 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: radicale
-  namespace: radicale
+  name: sftpgo
+  namespace: sftpgo
 spec:
   interval: 5m
   chart:
