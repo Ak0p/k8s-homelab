@@ -40,3 +40,15 @@ spec:
         accessModes: ReadWriteMany
         size: 100Gi
         storageClass: host-zfs-files
+    ingress:
+      sftpgoweb:
+        enabled: true
+        primary: true
+        ingressClassName: traefik
+        targetSelector:
+          sftpgo: 2221
+        integrations:
+          traefik:
+            enabled: true
+            entrypoints:
+              - web
