@@ -3,3 +3,4 @@ resources:
   - release.yml
   - repository.yml
   - users-configmap.yml
+  - routes.yml
