@@ -29,6 +29,7 @@ spec:
       sftp:
         port: 2022
         protocol: TCP
+        expose: true
       ftp:
         port: 2121
         protocol: TCP
