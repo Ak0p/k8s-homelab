@@ -1,5 +1,5 @@
 ---
-apiVersion: gateway.networking.k8s.io/v1
+apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: TCPRoute
 metadata:
   name: sftpgo-sftp-route
@@ -15,7 +15,7 @@ spec:
           namespace: sftpgo
           port: 2022
 ---
-apiVersion: gateway.networking.k8s.io/v1
+apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: TCPRoute
 metadata:
   name: sftpgo-ftp-route
@@ -31,7 +31,7 @@ spec:
           namespace: sftpgo
           port: 2121
 ---
-apiVersion: gateway.networking.k8s.io/v1
+apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: TCPRoute
 metadata:
   name: sftpgo-webdav-route
@@ -47,7 +47,7 @@ spec:
           namespace: sftpgo
           port: 10080
 ---
-apiVersion: gateway.networking.k8s.io/v1
+apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: TCPRoute
 metadata:
   name: sftpgo-passiveport-route
