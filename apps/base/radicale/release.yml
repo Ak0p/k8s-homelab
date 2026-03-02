@@ -15,6 +15,9 @@ spec:
         name: radicale
         namespace: radicale
   values:
+    radicale:
+      auth:
+        htpasswd_encryption: bcrypt
     securityContext:
       pod:
         fsGroupChangePolicy: "Always"
