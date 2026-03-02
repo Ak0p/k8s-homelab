@@ -18,6 +18,9 @@ spec:
     radicale:
       auth:
         htpasswd_encryption: bcrypt
+        users:
+          - username: andrei
+            password: $2y$05$PEI4HJmksx.WxBn4gOWC2u8Lx/bBuIlm//1KA8vivmQt5cutm3pbm
     securityContext:
       pod:
         fsGroupChangePolicy: "Always"
