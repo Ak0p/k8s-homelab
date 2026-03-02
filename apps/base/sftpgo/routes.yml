@@ -5,7 +5,7 @@ metadata:
   name: sftpgo-sftp-route
   namespace: traefik
 spec:
-  entrypoint:
+  entryPoints:
     - tcp
   routes:
     - match: HostSNI(`*`)
@@ -19,7 +19,7 @@ metadata:
   name: sftpgo-ftp-route
   namespace: traefik
 spec:
-  entrypoint:
+  entryPoints:
     - tcp
   routes:
     - match: HostSNI(`*`)
