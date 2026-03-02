@@ -35,6 +35,8 @@ metadata:
   name: sftpgo-webdav-route
   namespace: traefik
 spec:
+  entryPoints:
+    - web
   routes:
     - kind: Rule
       match: Host(`webdav.akop.ro`)
@@ -50,6 +52,8 @@ metadata:
   name: sftpgo-admin-route
   namespace: traefik
 spec:
+  entryPoints:
+    - web
   routes:
     - kind: Rule
       match: Host(`sftpgo.akop.ro`)
