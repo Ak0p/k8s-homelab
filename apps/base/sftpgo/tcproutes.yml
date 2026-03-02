@@ -1,0 +1,64 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: TCPRoute
+metadata:
+  name: sftpgo-sftp-route
+  namespace: traefik
+spec:
+  parentRefs:
+    - name: traefik
+      sectionName: tcp
+      kind: Gateway
+  rules:
+    - backendRefs:
+        - name: sftpgo-sftpport
+          namespace: sftpgo
+          port: 2022
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: TCPRoute
+metadata:
+  name: sftpgo-ftp-route
+  namespace: traefik
+spec:
+  parentRefs:
+    - name: traefik
+      sectionName: tcp
+      kind: Gateway
+  rules:
+    - backendRefs:
+        - name: sftpgo-ftpport
+          namespace: sftpgo
+          port: 2121
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: TCPRoute
+metadata:
+  name: sftpgo-webdav-route
+  namespace: traefik
+spec:
+  parentRefs:
+    - name: traefik
+      sectionName: tcp
+      kind: Gateway
+  rules:
+    - backendRefs:
+        - name: sftpgo-webdavport
+          namespace: sftpgo
+          port: 10080
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: TCPRoute
+metadata:
+  name: sftpgo-passiveport-route
+  namespace: traefik
+spec:
+  parentRefs:
+    - name: traefik
+      sectionName: tcp
+      kind: Gateway
+  rules:
+    - backendRefs:
+        - name: sftpgo-passiveports
+          namespace: sftpgo
+          port: 50000

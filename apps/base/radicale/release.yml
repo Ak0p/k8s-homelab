@@ -15,6 +15,9 @@ spec:
         name: radicale
         namespace: radicale
   values:
+    securityContext:
+      pod:
+        fsGroupChangePolicy: "Always"
     persistence:
       data:
         enabled: true
