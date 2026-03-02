@@ -26,15 +26,15 @@ spec:
         accessModes: ReadWriteMany
         size: 2Gi
         storageClass: host-zfs-files
-    # ingress:
-    #   radicale:
-    #     enabled: true
-    #     primary: true
-    #     ingressClassName: traefik
-    #     targetSelector:
-    #       radicale: 80
-    #     integrations:
-    #       traefik:
-    #         enabled: true
-    #         entrypoints:
-    #           - web
+    ingress:
+      radicale:
+        enabled: true
+        primary: true
+        ingressClassName: traefik
+        targetSelector:
+          radicale: main
+        integrations:
+          traefik:
+            enabled: true
+            entrypoints:
+              - web

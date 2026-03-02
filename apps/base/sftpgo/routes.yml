@@ -37,7 +37,7 @@ metadata:
 spec:
   routes:
     - kind: Rule
-      match: Host(`calendar.akop.ro`)
+      match: Host(`webdav.akop.ro`)
       services:
         - kind: Service
           name: sftpgo-webdavport
