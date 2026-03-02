@@ -26,20 +26,3 @@ spec:
         accessModes: ReadWriteMany
         size: 2Gi
         storageClass: host-zfs-files
-    ingress:
-      radicale:
-        enabled: true
-        primary: true
-        ingressClassName: traefik
-        targetSelector:
-          radicale: main
-        hosts:
-          - host: radicale.akop.ro
-            paths:
-              - path: /
-                pathType: Prefix
-        integrations:
-          traefik:
-            enabled: true
-            entrypoints:
-              - web
