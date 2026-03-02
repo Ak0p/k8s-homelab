@@ -33,6 +33,11 @@ spec:
         ingressClassName: traefik
         targetSelector:
           radicale: main
+        hosts:
+          - host: radicale.akop.ro
+            paths:
+              - path: /
+                pathType: Prefix
         integrations:
           traefik:
             enabled: true
