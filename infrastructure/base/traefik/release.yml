@@ -29,7 +29,10 @@ spec:
       sftp:
         port: 2022
         protocol: TCP
-        expose: true
+        expose:
+          default: true
       ftp:
         port: 2121
         protocol: TCP
+        expose:
+          default: false
