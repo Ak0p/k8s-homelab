@@ -40,21 +40,3 @@ spec:
         accessModes: ReadWriteMany
         size: 100Gi
         storageClass: host-zfs-files
-    ingress:
-      sftpgoweb:
-        enabled: true
-        primary: true
-        namespace: sftpgo
-        ingressClassName: traefik
-        targetSelector:
-          main: main
-        hosts:
-          - host: files.akop.ro
-            paths:
-              - path: /
-                pathType: Prefix
-        integrations:
-          traefik:
-            enabled: true
-            entrypoints:
-              - web
