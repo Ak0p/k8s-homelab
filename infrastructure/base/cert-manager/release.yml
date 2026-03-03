@@ -14,6 +14,6 @@ spec:
         kind: HelmRepository
         name: repo-name
         namespace: flux-system
-    values:
-      crds:
-        enabled: true
+  values:
+    crds:
+      enabled: true
