@@ -4,3 +4,4 @@ resources:
   - ./redis
   - ./traefik
   - ./metallb
+  - ./cert-manager
