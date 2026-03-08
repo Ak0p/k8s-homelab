@@ -36,15 +36,17 @@ metadata:
   namespace: traefik
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
     - kind: Rule
-      match: Host(`webdav.akop.ro`)
+      match: Host(`dav.sftpgo.akop.ro`)
       services:
         - kind: Service
           name: sftpgo-webdavport
           namespace: sftpgo
           port: 10080
+  tls:
+    secretName: wildcard-certificate-secret
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
@@ -56,9 +58,11 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`sftpgo.akop.ro`)
+      match: Host(`dash.sftpgo.akop.ro`)
       services:
         - kind: Service
           name: sftpgo
           namespace: sftpgo
           port: 2221
+  tls:
+    secretName: wildcard-certificate-secret
