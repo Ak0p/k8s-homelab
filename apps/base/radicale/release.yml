@@ -20,7 +20,7 @@ spec:
         htpasswd_encryption: bcrypt
         users:
           - username: andrei
-            password: $2y$05$PEI4HJmksx.WxBn4gOWC2u8Lx/bBuIlm//1KA8vivmQt5cutm3pbm
+            password: L*Y!trs^%4%hO4ytZh1r
     securityContext:
       pod:
         fsGroupChangePolicy: "Always"
