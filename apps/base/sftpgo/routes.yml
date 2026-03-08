@@ -46,7 +46,7 @@ spec:
           namespace: sftpgo
           port: 10080
   tls:
-    secretName: wildcard-certificate-secret
+    secretName: certificate-certificate-secret
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
@@ -65,4 +65,4 @@ spec:
           namespace: sftpgo
           port: 2221
   tls:
-    secretName: wildcard-certificate-secret
+    secretName: storage-certificate-secret
