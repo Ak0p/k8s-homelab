@@ -16,4 +16,4 @@ spec:
           namespace: radicale
           port: 5232
   tls:
-    secretName: wildcard-certificate
+    secretName: wildcard-certificate-secret
