@@ -1,0 +1,18 @@
+# @Deprecated
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: immich-route
+  namespace: traefik
+spec:
+  parentRefs:
+    - namespace: traefik
+      name: traefik-gateway
+  hostnames:
+    - immich.akop.ro
+
+  rules:
+    - backendRefs:
+        - name: immich-server
+          namespace: immich
+          port: 2283

@@ -5,4 +5,3 @@ resources:
   - pvc.yml
   - cluster-release.yml
   - routes.yml
-  - reference-grant.yml
