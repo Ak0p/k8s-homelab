@@ -1,0 +1,28 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: adguardhome
+  namespace: adguardhome
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: adguardhome
+      version: 13.0.0
+      sourceRef:
+        kind: HelmRepository
+        name: adguardhome
+        namespace: adguardhome
+  values:
+    persistence:
+      data:
+        type: pvc
+        accessModes: ReadWriteOnce
+        size: 4Gi
+        storageClass: host-zfs-standard
+      config:
+        type: configmap
+        objectName: adguard-config
+        subPath: config
+        readOnly: false

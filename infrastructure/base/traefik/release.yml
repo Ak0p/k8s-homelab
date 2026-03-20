@@ -36,3 +36,50 @@ spec:
         protocol: TCP
         expose:
           default: false
+
+      # AdGuard Home DNS
+      dns-tcp:
+        port: 53
+        protocol: TCP
+        expose:
+          default: true
+      dns-udp:
+        port: 53
+        protocol: UDP
+        expose:
+          default: true
+      dns-https:
+        port: 10234
+        protocol: TCP
+        expose:
+          default: true
+      dns-https-udp:
+        port: 10234
+        protocol: UDP
+        expose:
+          default: true
+      dns-crypt:
+        port: 5443
+        protocol: TCP
+        expose:
+          default: false
+      dns-crypt-udp:
+        port: 5443
+        protocol: UDP
+        expose:
+          default: false
+      dns-quic-udp-1:
+        port: 784
+        protocol: UDP
+        expose:
+          default: false
+      dns-quic-udp-2:
+        port: 853
+        protocol: UDP
+        expose:
+          default: false
+      dns-quic-udp-3:
+        port: 8853
+        protocol: UDP
+        expose:
+          default: false

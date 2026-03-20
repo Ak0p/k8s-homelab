@@ -1,0 +1,10 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: adguardhome
+  namespace: adguardhome
+spec:
+  interval: 1h
+  type: oci
+  url: oci://oci.trueforge.org/truecharts/
