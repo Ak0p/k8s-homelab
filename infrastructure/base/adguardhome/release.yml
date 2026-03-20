@@ -21,8 +21,10 @@ spec:
         accessModes: ReadWriteMany
         size: 4Gi
         storageClass: host-zfs-standard
-    config:
-      type: pvc
-      accessModes: ReadWriteMany
-      size: 50Mi
-      storageClass: host-zfs-standard
+      config:
+        enabled: true
+        type: configmap
+        objectName: adguardhome-config
+        mountPath: /opt/adguardhome/conf/AdGuardHome.yaml
+        subPath: AdGuardHome.yaml
+        readOnly: false
