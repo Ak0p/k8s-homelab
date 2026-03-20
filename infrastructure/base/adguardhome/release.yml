@@ -21,8 +21,10 @@ spec:
         accessModes: ReadWriteOnce
         size: 4Gi
         storageClass: host-zfs-standard
-      config:
-        type: configmap
-        objectName: adguard-config
-        subPath: config
-        readOnly: false
+    config:
+      enabled: true
+      type: configmap
+      objectName: adguardhome-config
+      mountPath: /opt/adguardhome/conf/AdGuardHome.yaml
+      subPath: AdGuardHome.yaml
+      readOnly: false
