@@ -1,3 +1,17 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: adguard-route
+  namespace: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`adguard.akop.ro`)
+      services:
+        - name: adguardhome-adguard-home
+          namespace: adguardhome
+          port: 10232
 # DNS TCP - Port 53
 ---
 apiVersion: traefik.io/v1alpha1
