@@ -46,7 +46,7 @@ spec:
           namespace: adguardhome
           port: 443
   tls:
-    passthrough: true
+    secretName: wildcard-certificate-secret
 ---
 # DNS HTTPS UDP - Port 10234 -> 443
 apiVersion: traefik.io/v1alpha1
