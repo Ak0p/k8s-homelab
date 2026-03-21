@@ -25,6 +25,8 @@ spec:
         matchRule: Host(`traefik.akop.ro`)
         entryPoints:
           - web
+    service:
+      single: false
     ports:
       sftp:
         port: 2022
