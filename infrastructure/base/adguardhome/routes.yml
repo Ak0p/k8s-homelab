@@ -91,7 +91,7 @@ spec:
   routes:
     - match: HostSNI(`*`)
       services:
-        - name: dns-crypt
+        - name: adguardhome-adguard-home-dns-crypt
           port: 5443
           namespace: adguardhome
 ---
@@ -106,7 +106,7 @@ spec:
     - dns-crypt-udp
   routes:
     - services:
-        - name: dns-crypt-udp
+        - name: adguardhome-adguard-home-dns-crypt-udp
           port: 5443
           namespace: adguardhome
 ---
@@ -122,7 +122,7 @@ spec:
     - dns-quic-udp-1
   routes:
     - services:
-        - name: dns-quic-udp-1
+        - name: adguardhome-adguard-home-dns-quic-udp-1
           port: 784
 ---
 # DNS QUIC UDP - Port 853
@@ -136,7 +136,7 @@ spec:
     - dns-quic-udp-2
   routes:
     - services:
-        - name: dns-quic-udp-1
+        - name: adguardhome-adguard-home-dns-quic-udp-1
           port: 853
 ---
 # DNS QUIC UDP - Port 8853
@@ -150,5 +150,5 @@ spec:
     - dns-quic-udp-3
   routes:
     - services:
-        - name: dns-quic-udp-1
+        - name: adguardhome-adguard-home-dns-quic-udp-1
           port: 8853
