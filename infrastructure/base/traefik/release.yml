@@ -27,6 +27,9 @@ spec:
           - web
     service:
       single: false
+      annotations:
+        metallb.io/loadBalancerIPs: 192.168.1.196
+        metallb.io/allow-shared-ip: "traefik-shared"
     ports:
       sftp:
         port: 2022
