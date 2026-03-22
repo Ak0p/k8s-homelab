@@ -1,0 +1,56 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: velero
+  namespace: flux-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: velero
+      version: 11.4.0
+      sourceRef:
+        kind: HelmRepository
+        name: velero
+        namespace: flux-system
+  values:
+    deployNodeAgent: true
+    configuration:
+      defaultVolumesToFsBackup: false
+      backupStorageLocation:
+        - name: minio
+          provider: aws
+          bucket: velero-backup
+          default: true
+          config:
+            region: minio
+            s3ForcePathStyle: "true"
+            s3Url: http://192.168.1.181:9000
+            publicUrl: http://192.168.1.181:9000
+            insecureSkipTLSVerify: "true"
+      volumeSnapshotLocation:
+        - name: default
+          provider: openebs.io/zfspv-blockstore
+          config:
+            namespace: openebs
+            prefix: zfs
+            bucket: velero-backup
+            provider: aws
+            region: minio
+            s3ForcePathStyle: "true"
+            s3Url: http://192.168.1.181:9000
+            insecureSkipTLSVerify: "true"
+    initContainers:
+      - name: velero-plugin-for-aws
+        image: velero/velero-plugin-for-aws:v1.13.1
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - mountPath: /target
+            name: plugins
+      - name: velero-plugin-for-openebs
+        image: openebs/velero-plugin:3.6.0
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - mountPath: /target
+            name: plugins

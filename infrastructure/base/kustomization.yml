@@ -6,3 +6,4 @@ resources:
   - ./metallb
   - ./cert-manager
   - ./adguardhome
+  - ./velero
