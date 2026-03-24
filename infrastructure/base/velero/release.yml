@@ -45,11 +45,11 @@ spec:
             insecureSkipTLSVerify: "true"
 
       volumeSnapshotLocation:
-        - name: default
-          provider: openebs.io/zfspv-blockstore
+        - name: minio
+          provider: openebs.io/cstor-blockstore
           config:
             namespace: openebs
-            prefix: zfs
+            prefix: cstor
             bucket: velero-backup
             provider: aws
             region: minio
