@@ -15,9 +15,20 @@ spec:
         name: velero
         namespace: velero
   values:
+    namespace:
+      labels:
+        pod-security.kubernetes.io/enforce: privileged
+        pod-security.kubernetes.io/enforce-version: latest
+        pod-security.kubernetes.io/audit: privileged
+        pod-security.kubernetes.io/audit-version: latest
+        pod-security.kubernetes.io/warn: privileged
+        pod-security.kubernetes.io/warn-version: latest
+
     deployNodeAgent: true
+
     configuration:
       defaultVolumesToFsBackup: false
+
       backupStorageLocation:
         - name: minio
           provider: aws
@@ -29,6 +40,7 @@ spec:
             s3Url: http://192.168.1.181:9000
             publicUrl: http://192.168.1.181:9000
             insecureSkipTLSVerify: "true"
+
       volumeSnapshotLocation:
         - name: default
           provider: openebs.io/zfspv-blockstore
@@ -41,6 +53,7 @@ spec:
             s3ForcePathStyle: "true"
             s3Url: http://192.168.1.181:9000
             insecureSkipTLSVerify: "true"
+
     initContainers:
       - name: velero-plugin-for-aws
         image: velero/velero-plugin-for-aws:v1.13.1
