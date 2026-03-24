@@ -14,6 +14,7 @@ spec:
         kind: HelmRepository
         name: velero
         namespace: velero
+
   values:
     namespace:
       labels:
@@ -33,12 +34,14 @@ spec:
         - name: minio
           provider: aws
           bucket: velero-backup
+          credential:
+            name: minio-creds
+            key: credentials
           default: true
           config:
             region: minio
             s3ForcePathStyle: "true"
             s3Url: http://192.168.1.181:9000
-            publicUrl: http://192.168.1.181:9000
             insecureSkipTLSVerify: "true"
 
       volumeSnapshotLocation:
@@ -50,6 +53,9 @@ spec:
             bucket: velero-backup
             provider: aws
             region: minio
+            credential:
+              name: minio-creds
+              key: credentials
             s3ForcePathStyle: "true"
             s3Url: http://192.168.1.181:9000
             insecureSkipTLSVerify: "true"
