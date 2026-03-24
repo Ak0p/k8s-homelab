@@ -7,4 +7,3 @@ resources:
   - ./cert-manager
   - ./adguardhome
   - ./velero
-  - ./dadada
