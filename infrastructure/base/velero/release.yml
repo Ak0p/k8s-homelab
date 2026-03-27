@@ -28,6 +28,7 @@ spec:
     deployNodeAgent: true
 
     configuration:
+      features: enableCSI
       defaultVolumesToFsBackup: false
 
       backupStorageLocation:
