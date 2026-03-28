@@ -3,4 +3,3 @@ resources:
   - repository.yml
   - release.yml
   - zfs-storageclass.yml
-  - zfs-volume-snapshot.yml
