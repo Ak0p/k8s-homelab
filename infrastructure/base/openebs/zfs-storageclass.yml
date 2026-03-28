@@ -11,6 +11,7 @@ parameters:
   compression: "lz4"
   dedup: "off"
   fstype: "zfs"
+  shared: "yes" # to enable ReadWriteMany access mode
   poolname: "fast"
 ---
 # Storage class for file storage (documents, photos, videos, etc)
