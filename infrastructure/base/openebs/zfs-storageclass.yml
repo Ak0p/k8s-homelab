@@ -5,6 +5,7 @@ metadata:
   name: host-zfs-standard
 provisioner: zfs.csi.openebs.io
 allowVolumeExpansion: true
+reclaimPolicy: Retain
 parameters:
   recordsize: "128k"
   compression: "lz4"
