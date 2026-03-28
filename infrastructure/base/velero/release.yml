@@ -25,7 +25,9 @@ spec:
         pod-security.kubernetes.io/warn: privileged
         pod-security.kubernetes.io/warn-version: latest
 
-    # deployNodeAgent: true
+    deployNodeAgent: true
+    nodeAgent:
+      disableHostPath: true
 
     configuration:
       features: EnableCSI
