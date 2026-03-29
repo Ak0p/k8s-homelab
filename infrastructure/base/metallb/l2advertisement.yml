@@ -10,4 +10,4 @@ spec:
     - matchLabels:
         kubernetes.io/hostname: talos-5at-i15
   interfaces:
-    - enp0s31f6
+    - enp34s0
