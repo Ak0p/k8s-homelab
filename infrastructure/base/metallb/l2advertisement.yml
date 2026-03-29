@@ -8,6 +8,6 @@ spec:
     - traefik
   nodeSelectors:
     - matchLabels:
-        kubernetes.io/hostname: talos-llq-9ec
+        kubernetes.io/hostname: talos-5at-i15
   interfaces:
     - enp0s31f6
