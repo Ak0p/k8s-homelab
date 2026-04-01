@@ -1,0 +1,155 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: adguard-route
+  namespace: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`adguard.akop.ro`)
+      services:
+        - name: adguardhome-adguard-home
+          namespace: adguardhome
+          port: 10232
+  tls:
+    secretName: wildcard-certificate-secret
+# DNS TCP - Port 53
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: dns-tcp
+  namespace: traefik
+spec:
+  entryPoints:
+    - dns-tcp
+  routes:
+    - match: HostSNI(`*`)
+      services:
+        - name: adguardhome-adguard-home-dns-tcp
+          port: 53
+          namespace: adguardhome
+---
+# DNS UDP - Port 53
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteUDP
+metadata:
+  name: dns-udp
+  namespace: traefik
+spec:
+  entryPoints:
+    - dns-udp
+  routes:
+    - services:
+        - name: adguardhome-adguard-home-dns-udp
+          namespace: adguardhome
+          port: 53
+
+---
+# DNS HTTPS (TCP/TLS) - Port 10234 -> 443
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dns-https
+  namespace: traefik
+spec:
+  entryPoints:
+    - dns-https
+  routes:
+    - match: Host(`dns.akop.ro`)
+      services:
+        - name: adguardhome-adguard-home-dns-https
+          namespace: adguardhome
+          port: 10234
+  tls:
+    secretName: wildcard-certificate-secret
+---
+# DNS HTTPS UDP - Port 10234 -> 443
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteUDP
+metadata:
+  name: dns-https-udp
+  namespace: traefik
+spec:
+  entryPoints:
+    - dns-https-udp
+  routes:
+    - services:
+        - name: adguardhome-adguard-home-dns-https-udp
+          port: 10234
+          namespace: adguardhome
+# ---
+# # DNS Crypt (TCP) - Port 5443
+# apiVersion: traefik.io/v1alpha1
+# kind: IngressRouteTCP
+# metadata:
+#   name: dns-crypt
+#   namespace: traefik
+# spec:
+#   entryPoints:
+#     - dns-crypt
+#   routes:
+#     - match: HostSNI(`*`)
+#       services:
+#         - name: adguardhome-adguard-home-dns-crypt
+#           port: 5443
+#           namespace: adguardhome
+# ---
+# # DNS Crypt UDP - Port 5443
+# apiVersion: traefik.io/v1alpha1
+# kind: IngressRouteUDP
+# metadata:
+#   name: dns-crypt-udp
+#   namespace: traefik
+# spec:
+#   entryPoints:
+#     - dns-crypt-udp
+#   routes:
+#     - services:
+#         - name: adguardhome-adguard-home-dns-crypt-udp
+#           port: 5443
+#           namespace: adguardhome
+# ---
+# # DNS QUIC UDP - Ports 784, 853, 8853
+# # Port 784
+# apiVersion: traefik.io/v1alpha1
+# kind: IngressRouteUDP
+# metadata:
+#   name: dns-quic-udp-1
+#   namespace: traefik
+# spec:
+#   entryPoints:
+#     - dns-quic-udp-1
+#   routes:
+#     - services:
+#         - name: adguardhome-adguard-home-dns-quic-udp-1
+#           port: 784
+# ---
+# # DNS QUIC UDP - Port 853
+# apiVersion: traefik.io/v1alpha1
+# kind: IngressRouteUDP
+# metadata:
+#   name: dns-quic-udp-2
+#   namespace: traefik
+# spec:
+#   entryPoints:
+#     - dns-quic-udp-2
+#   routes:
+#     - services:
+#         - name: adguardhome-adguard-home-dns-quic-udp-1
+#           port: 853
+# ---
+# # DNS QUIC UDP - Port 8853
+# apiVersion: traefik.io/v1alpha1
+# kind: IngressRouteUDP
+# metadata:
+#   name: dns-quic-udp-3
+#   namespace: traefik
+# spec:
+#   entryPoints:
+#     - dns-quic-udp-3
+#   routes:
+#     - services:
+#         - name: adguardhome-adguard-home-dns-quic-udp-1
+#           port: 8853
