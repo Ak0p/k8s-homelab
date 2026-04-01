@@ -6,3 +6,4 @@ routes.yml
 certificates.yml
 clusterissuer.yml
 *secret.yml
+manifests/
