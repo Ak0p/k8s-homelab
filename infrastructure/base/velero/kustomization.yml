@@ -3,3 +3,4 @@ resources:
   - repository.yml
   - release.yml
   - volume-snapshot-class.yml
+  - schedule.yml
