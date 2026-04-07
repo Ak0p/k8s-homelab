@@ -1,8 +1,8 @@
 resources:
-  - ./openebs
-  - ./cnpg
-  - ./traefik
-  - ./metallb
-  - ./cert-manager
-  - ./adguardhome
+  - ../base/openebs
+  - ../base/cnpg
+  - ../base/traefik
+  - ../base/metallb
+  - ../base/cert-manager
+  - ../base/adguardhome
   - ./velero
