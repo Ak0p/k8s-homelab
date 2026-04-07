@@ -1,9 +1,9 @@
 resources:
-  - ../base/metallb
-  - ../base/cert-manager
-  - ../base/traefik
-  - ../base/rustfs
-  - ../base/openebs
+  - ../../base/metallb
+  - ../../base/cert-manager
+  - ../../base/traefik
+  - ../../base/rustfs
+  - ../../base/openebs
 
 patches:
   - target:
