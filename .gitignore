@@ -1,8 +1,3 @@
-controlplane.yml
-controlplane.yaml
-worker.yml
-worker.yaml
-routes.yml
 certificates.yml
 clusterissuer.yml
 *secret.yml

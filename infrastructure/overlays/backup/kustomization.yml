@@ -1,0 +1,61 @@
+resources:
+  - ../base/metallb
+  - ../base/cert-manager
+  - ../base/traefik
+  - ../base/rustfs
+  - ../base/openebs
+
+patches:
+  - target:
+      kind: IPAddressPool
+      name: traefik
+    patch: |-
+      - op: replace
+        path: /spec/addresses
+        value:
+          - 192.168.1.102
+  - target:
+      kind: L2Advertisement
+      name: traefik
+    patch: |-
+      - op: replace
+        path: /spec/nodeSelectors/0/matchLabels/kubernetes.io~1hostname
+        values:
+          - talos-llq-9ec
+      - op: replace
+        path: /spec/interfaces
+        value:
+          - enp0s31f6
+  - target:
+      kind: StorageClass
+      name: host-zfs-standard
+    patch: |-
+      - op: replace
+        path: /parameters/poolname
+        value: "tank"
+  - target:
+      kind: StorageClass
+      name: host-zfs-files
+    patch: |-
+      - op: replace
+        path: /parameters/poolname
+        value: "tank"
+
+  - target:
+      kind: HelmRelease
+      name: traefik
+    patch: |-
+      - op: remove
+        path: /spec/values/ports
+
+      - op: replace
+        path: /spec/values/service/single
+        value: true
+
+      - op: replace
+      path: /spec/values/service/annotations/loadBalancerIPs
+      value: 192.168.1.102
+
+      - op: replace
+      path: /spec/values/ingressRoute/dashboard/matchRule
+      value: Host(`traefik.rustfs.akop.ro`)

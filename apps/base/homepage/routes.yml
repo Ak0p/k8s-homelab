@@ -1,0 +1,19 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: radicale-route
+  namespace: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`home.akop.ro`)
+      services:
+        - kind: Service
+          name: homepage
+          namespace: homepage
+          port: 5232
+  tls:
+    secretName: wildcard-certificate-secret

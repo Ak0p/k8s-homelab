@@ -9,7 +9,7 @@ spec:
   retryInterval: 2m
   timeout: 5m
   prune: true
-  path: ./infrastructure/base
+  path: ./infrastructure/overlays/main
   sourceRef:
     kind: GitRepository
     name: flux-system
