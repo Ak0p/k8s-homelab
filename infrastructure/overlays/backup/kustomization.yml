@@ -66,7 +66,7 @@ patches:
       name: traefik
     patch: |-
       - op: replace
-        path: /spec/values/service/annotations/loadBalancerIPs
+        path: /spec/values/service/annotations/metallb.io~1loadBalancerIPs
         value: 192.168.1.102
   - target:
       kind: HelmRelease
