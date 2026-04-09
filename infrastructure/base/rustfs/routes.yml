@@ -10,7 +10,7 @@ spec:
   routes:
     - match: Host(`s3.rustfs.akop.ro`)
       services:
-        - name: adguardhome-adguard-home
+        - name: rustfs-svc
           namespace: rustfs
           port: 9000
   tls:
@@ -27,7 +27,7 @@ spec:
   routes:
     - match: Host(`dash.rustfs.akop.ro`)
       services:
-        - name: rustfs-headless
+        - name: rustfs-svc
           namespace: rustfs
           port: 9001
   tls:
