@@ -14,18 +14,23 @@ patches:
         path: /spec/addresses
         value:
           - 192.168.1.102
+
   - target:
       kind: L2Advertisement
       name: traefik
     patch: |-
       - op: replace
         path: /spec/nodeSelectors/0/matchLabels/kubernetes.io~1hostname
-        values:
-          - talos-llq-9ec
+        value: talos-llq-9ec
+  - target:
+      kind: L2Advertisement
+      name: traefik
+    patch: |-
       - op: replace
         path: /spec/interfaces
         value:
           - enp0s31f6
+
   - target:
       kind: StorageClass
       name: host-zfs-standard
@@ -33,6 +38,7 @@ patches:
       - op: replace
         path: /parameters/poolname
         value: "tank"
+
   - target:
       kind: StorageClass
       name: host-zfs-files
