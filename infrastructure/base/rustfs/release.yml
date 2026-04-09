@@ -20,7 +20,7 @@ spec:
         enabled: true
       distributed:
         enabled: false
-    storageClass:
+    storageclass:
       name: host-zfs-files
       dataStorageSize: 2Ti
       logStorageSize: 2Gi
