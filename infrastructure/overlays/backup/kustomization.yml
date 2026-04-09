@@ -60,12 +60,12 @@ patches:
       name: traefik
     patch: |-
       - op: replace
-      path: /spec/values/service/annotations/loadBalancerIPs
-      value: 192.168.1.102
+        path: /spec/values/service/annotations/loadBalancerIPs
+        value: 192.168.1.102
   - target:
       kind: HelmRelease
       name: traefik
     patch: |-
       - op: replace
-      path: /spec/values/ingressRoute/dashboard/matchRule
-      value: Host(`traefik.rustfs.dudu.ro`)
+        path: /spec/values/ingressRoute/dashboard/matchRule
+        value: Host(`traefik.rustfs.dudu.ro`)
