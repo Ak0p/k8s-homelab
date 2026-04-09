@@ -48,14 +48,24 @@ patches:
       - op: remove
         path: /spec/values/ports
 
+  - target:
+      kind: HelmRelease
+      name: traefik
+    patch: |-
       - op: replace
         path: /spec/values/service/single
         value: true
-
+  - target:
+      kind: HelmRelease
+      name: traefik
+    patch: |-
       - op: replace
       path: /spec/values/service/annotations/loadBalancerIPs
       value: 192.168.1.102
-
+  - target:
+      kind: HelmRelease
+      name: traefik
+    patch: |-
       - op: replace
       path: /spec/values/ingressRoute/dashboard/matchRule
-      value: Host(`traefik.rustfs.akop.ro`)
+      value: Host(`traefik.rustfs.dudu.ro`)
