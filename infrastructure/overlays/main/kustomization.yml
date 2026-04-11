@@ -6,3 +6,9 @@ resources:
   - ../../base/cert-manager
   - ../../base/adguardhome
   - ../../base/velero
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: traefik
+    path: patches/traefik-release.yml
