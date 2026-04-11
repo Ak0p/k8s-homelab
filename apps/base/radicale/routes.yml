@@ -4,6 +4,8 @@ kind: IngressRoute
 metadata:
   name: radicale-route
   namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: calendar.akop.ro
 spec:
   entryPoints:
     - websecure

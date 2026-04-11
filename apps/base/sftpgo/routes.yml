@@ -1,3 +1,44 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sftpgo-webdav-route
+  namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: dav.sftpgo.akop.ro
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`dav.sftpgo.akop.ro`)
+      services:
+        - kind: Service
+          name: sftpgo-webdavport
+          namespace: sftpgo
+          port: 10080
+  tls:
+    secretName: storage-certificate-secret
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sftpgo-admin-route
+  namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: dash.sftpgo.akop.ro
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`dash.sftpgo.akop.ro`)
+      services:
+        - kind: Service
+          name: sftpgo
+          namespace: sftpgo
+          port: 2221
+  tls:
+    secretName: storage-certificate-secret
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRouteTCP
@@ -29,40 +70,3 @@ spec:
           port: 2121
           namespace: sftpgo
 ---
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: sftpgo-webdav-route
-  namespace: traefik
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - kind: Rule
-      match: Host(`dav.sftpgo.akop.ro`)
-      services:
-        - kind: Service
-          name: sftpgo-webdavport
-          namespace: sftpgo
-          port: 10080
-  tls:
-    secretName: storage-certificate-secret
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: sftpgo-admin-route
-  namespace: traefik
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - kind: Rule
-      match: Host(`dash.sftpgo.akop.ro`)
-      services:
-        - kind: Service
-          name: sftpgo
-          namespace: sftpgo
-          port: 2221
-  tls:
-    secretName: storage-certificate-secret
