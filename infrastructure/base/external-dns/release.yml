@@ -20,7 +20,7 @@ spec:
     sources:
       - traefik-proxy
       - service
-    txtOwnerId: main-cluste
+    txtOwnerId: main-cluster
 
     # Adguard Home Provider
     provider:
