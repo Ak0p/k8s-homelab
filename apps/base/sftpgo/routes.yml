@@ -5,6 +5,7 @@ metadata:
   namespace: traefik
   annotations:
     external-dns.alpha.kubernetes.io/hostname: dav.sftpgo.akop.ro
+    external-dns.alpha.kubernetes.io/target: traefik.akop.ro
 spec:
   entryPoints:
     - websecure
@@ -26,6 +27,7 @@ metadata:
   namespace: traefik
   annotations:
     external-dns.alpha.kubernetes.io/hostname: dash.sftpgo.akop.ro
+    external-dns.alpha.kubernetes.io/target: traefik.akop.ro
 spec:
   entryPoints:
     - websecure

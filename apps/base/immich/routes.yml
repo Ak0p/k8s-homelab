@@ -6,6 +6,7 @@ metadata:
   namespace: traefik
   annotations:
     external-dns.alpha.kubernetes.io/hostname: immich.akop.ro
+    external-dns.alpha.kubernetes.io/target: traefik.akop.ro
 spec:
   entryPoints:
     - websecure
