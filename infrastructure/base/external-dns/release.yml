@@ -19,7 +19,9 @@ spec:
     # Traefik Source
     sources:
       - traefik-proxy
+      - service
     txtOwnerId: main-cluste
+
     # Adguard Home Provider
     provider:
       name: webhook

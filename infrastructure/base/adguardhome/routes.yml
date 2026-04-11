@@ -4,7 +4,7 @@ metadata:
   name: adguardhome-ui
   namespace: traefik
   annotations:
-    external-dns.alpha.kubernetes.io/target: adguardhome.akop.ro
+    external-dns.alpha.kubernetes.io/target: traefik.akop.ro
     kubernetes.io/ingress.class: traefik
 spec:
   entryPoints:
