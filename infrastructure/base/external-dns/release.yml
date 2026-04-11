@@ -24,6 +24,9 @@ spec:
         - apiGroups: ["traefik.io"]
           resources: ["ingressroutes"]
           verbs: ["get", "list", "watch"]
+    txtOwnerId: main-cluster
+    domainFilters:
+      - akop.ro
 
     # Adguard Home Provider
     provider:
