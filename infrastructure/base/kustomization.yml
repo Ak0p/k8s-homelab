@@ -1,9 +1,0 @@
-resources:
-  - ./openebs
-  - ./cnpg
-  - ./redis
-  - ./traefik
-  - ./metallb
-  - ./cert-manager
-  - ./adguardhome
-  - ./velero

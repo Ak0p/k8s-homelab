@@ -6,6 +6,7 @@ resources:
   - ../../base/cert-manager
   - ../../base/adguardhome
   - ../../base/velero
+  - ../../base/external-dns
 
 patches:
   - target:
