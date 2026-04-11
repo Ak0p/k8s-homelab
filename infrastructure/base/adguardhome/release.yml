@@ -26,12 +26,12 @@ spec:
         accessModes: ReadWriteMany
         size: 100Mi
         storageClass: host-zfs-standard
-      service:
-        dns-tcp:
-          type: LoadBalancer
-          annotations:
-            metallb.io/loadBalancerIPs: 192.168.1.53
-        dns-udp:
-          type: LoadBalancer
-          annotations:
-            metallb.io/loadBalancerIPs: 192.168.1.53
+    service:
+      dns-tcp:
+        type: LoadBalancer
+        annotations:
+          metallb.io/loadBalancerIPs: 192.168.1.53
+      dns-udp:
+        type: LoadBalancer
+        annotations:
+          metallb.io/loadBalancerIPs: 192.168.1.53
