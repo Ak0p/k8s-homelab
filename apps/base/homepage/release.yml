@@ -15,19 +15,4 @@ spec:
         name: homepage
         namespace: homepage
   values:
-    persistence:
-      config:
-        enabled: true
-        type: pvc
-        retain: true
-        accessModes: ReadWriteMany
-        size: 200Mi
-        storageClass: host-zfs-files
-    securityContext:
-      pod:
-        fsGroup: 0
-      container:
-        runAsNonRoot: false
-        runAsUser: 0
-        runAsGroup: 0
-        readOnlyRootFilesystem: false
+    forceConfigFromValues: true
