@@ -5,7 +5,7 @@ metadata:
   name: rustfs-storage-route
   namespace: traefik
   annotations:
-    external-dns.alpha.kubernetes.io/target: traefik-backup.akop.ro
+    external-dns.alpha.kubernetes.io/target: 192.168.1.102
     kubernetes.io/ingress.class: traefik
 spec:
   entryPoints:

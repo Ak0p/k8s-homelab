@@ -40,3 +40,11 @@ patches:
       - op: replace
         path: /parameters/poolname
         value: "tank"
+
+  - target:
+      kind: HelmRelease
+      name: external-dns
+    patch: |-
+      - op: replace
+        path: /spec/values/txtOwnerId
+        value: backup-cluster

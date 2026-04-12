@@ -4,7 +4,7 @@ metadata:
   name: sftpgo-webdav-route
   namespace: traefik
   annotations:
-    external-dns.alpha.kubernetes.io/target: traefik.akop.ro
+    external-dns.alpha.kubernetes.io/target: 192.168.1.196
     kubernetes.io/ingress.class: traefik
 spec:
   entryPoints:
