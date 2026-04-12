@@ -25,9 +25,9 @@ spec:
         storageClass: host-zfs-files
     securityContext:
       pod:
-        fsGroup: 568
+        fsGroup: 0
       container:
-        runAsUser: 568
-        runAsGroup: 568
-        runAsNonRoot: true
-        readOnlyRootFilesystem: false # Homepage needs to write to /app
+        runAsNonRoot: false
+        runAsUser: 0
+        runAsGroup: 0
+        readOnlyRootFilesystem: false
