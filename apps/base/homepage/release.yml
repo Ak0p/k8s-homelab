@@ -17,8 +17,9 @@ spec:
   values:
     persistence:
       config:
+        enabled: true
         type: pvc
         retain: true
         accessModes: ReadWriteMany
-        size: 20Mi
+        size: 200Mi
         storageClass: host-zfs-files
