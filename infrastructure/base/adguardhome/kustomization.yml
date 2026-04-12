@@ -1,6 +1,5 @@
 resources:
   - namespace.yml
   - release.yml
-  - repository.yml
   - routes.yml
   - configmap.yml

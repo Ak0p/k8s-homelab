@@ -2,8 +2,8 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: sftpgo
-  namespace: sftpgo
+  name: truecharts
+  namespace: truecharts
 spec:
   interval: 1h
   type: oci

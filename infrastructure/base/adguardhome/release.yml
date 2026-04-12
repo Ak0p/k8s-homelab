@@ -12,8 +12,8 @@ spec:
       version: 13.0.0
       sourceRef:
         kind: HelmRepository
-        name: adguardhome
-        namespace: adguardhome
+        name: truecharts
+        namespace: truecharts
   values:
     persistence:
       data:

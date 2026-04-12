@@ -7,6 +7,7 @@ resources:
   - ../../base/adguardhome
   - ../../base/velero
   - ../../base/external-dns
+  - ../../base/sources
 
 patches:
   - target:

@@ -5,6 +5,7 @@ resources:
   - ../../base/rustfs
   - ../../base/openebs
   - ../../base/external-dns
+  - ../../base/sources
 
 patches:
   - target:
