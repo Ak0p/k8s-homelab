@@ -23,8 +23,3 @@ spec:
         accessModes: ReadWriteMany
         size: 10Gi
         storageClass: host-zfs-files
-    cnpg:
-      main:
-        enabled: true
-        storage:
-          storageClass: host-zfs-files
