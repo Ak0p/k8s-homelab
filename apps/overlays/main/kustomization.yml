@@ -3,3 +3,4 @@ resources:
   - ../../base/sftpgo
   - ../../base/radicale
   - ../../base/homepage
+  - ../../base/home-assistant
