@@ -4,6 +4,7 @@ resources:
   - ../../base/traefik
   - ../../base/rustfs
   - ../../base/openebs
+  - ../../base/external-dns
 
 patches:
   - target:

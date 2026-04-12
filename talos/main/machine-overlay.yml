@@ -4,7 +4,6 @@ machine:
   kernel:
     modules:
       - name: zfs
-
   kubelet:
     extraArgs:
       rotate-server-certificates: true
