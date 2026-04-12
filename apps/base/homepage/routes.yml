@@ -4,6 +4,9 @@ kind: IngressRoute
 metadata:
   name: radicale-route
   namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.196
+    kubernetes.io/ingress.class: traefik
 spec:
   entryPoints:
     - websecure

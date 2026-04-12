@@ -16,3 +16,9 @@ spec:
         namespace: homepage
   values:
     persistence:
+      config:
+        type: pvc
+        retain: true
+        accessModes: ReadWriteMany
+        size: 20Mi
+        storageClass: host-zfs-files
