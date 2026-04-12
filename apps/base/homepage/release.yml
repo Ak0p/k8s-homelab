@@ -23,3 +23,11 @@ spec:
         accessModes: ReadWriteMany
         size: 200Mi
         storageClass: host-zfs-files
+    securityContext:
+      pod:
+        fsGroup: 568
+      container:
+        runAsUser: 568
+        runAsGroup: 568
+        runAsNonRoot: true
+        readOnlyRootFilesystem: false # Homepage needs to write to /app
