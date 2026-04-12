@@ -21,6 +21,7 @@ spec:
       - traefik-proxy
       - service
     txtOwnerId: main-cluster
+    policy: sync
 
     # Adguard Home Provider
     provider:
