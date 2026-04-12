@@ -16,3 +16,11 @@ spec:
         namespace: truecharts
   values:
     forceConfigFromValues: true
+    persistence:
+      config:
+        enabled: true
+        type: pvc
+        retain: true
+        accessModes: ReadWriteMany
+        size: 10Gi
+        storageClass: host-zfs-files
