@@ -1,4 +1,5 @@
 resources:
+  - ../../base/sources
   - ../../base/openebs
   - ../../base/cnpg
   - ../../base/traefik
@@ -7,7 +8,6 @@ resources:
   - ../../base/adguardhome
   - ../../base/velero
   - ../../base/external-dns
-  - ../../base/sources
 
 patches:
   - target:
