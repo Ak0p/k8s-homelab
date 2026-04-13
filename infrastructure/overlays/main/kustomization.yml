@@ -8,3 +8,4 @@ resources:
   - ../../base/adguardhome
   - ../../base/velero
   - ../../base/external-dns
+  - ../../base/amd-gpu-operator
