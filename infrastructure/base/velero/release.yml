@@ -38,13 +38,13 @@ spec:
           provider: aws
           bucket: velero-backup
           credential:
-            name: minio-creds
+            name: s3-creds
             key: credentials
           default: true
           config:
             region: minio
             s3ForcePathStyle: "true"
-            s3Url: http://192.168.1.181:9000
+            s3Url: https://s3-rustfs.${domain}
             insecureSkipTLSVerify: "true"
 
       volumeSnapshotLocation:
@@ -57,10 +57,10 @@ spec:
             provider: aws
             region: minio
             credential:
-              name: minio-creds
+              name: s3-creds
               key: credentials
             s3ForcePathStyle: "true"
-            s3Url: http://192.168.1.181:9000
+            s3Url: https://s3-rustfs.${domain}
             insecureSkipTLSVerify: "true"
 
     initContainers:

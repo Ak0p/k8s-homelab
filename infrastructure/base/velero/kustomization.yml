@@ -4,3 +4,4 @@ resources:
   - release.yml
   - volume-snapshot-class.yml
   - schedule.yml
+  - s3-creds-secret.yml

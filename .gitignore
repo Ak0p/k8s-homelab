@@ -1,4 +1,2 @@
-certificates.yml
-clusterissuer.yml
-*secret.yml
 manifests/
+.sopsrc

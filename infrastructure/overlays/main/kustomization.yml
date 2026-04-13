@@ -8,9 +8,3 @@ resources:
   - ../../base/adguardhome
   - ../../base/velero
   - ../../base/external-dns
-
-patches:
-  - target:
-      kind: HelmRelease
-      name: traefik
-    path: patches/traefik-release.yml

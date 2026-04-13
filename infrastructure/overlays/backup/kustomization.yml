@@ -49,3 +49,11 @@ patches:
       - op: replace
         path: /spec/values/txtOwnerId
         value: backup-cluster
+
+  - target:
+      kind: Secret
+      name: adguard-configuration
+    patch: |-
+      - op: replace
+        path: /spec/stringData/url
+        value: adguardhome.${domain}

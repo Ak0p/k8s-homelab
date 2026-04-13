@@ -10,7 +10,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`adguardhome.akop.ro`)
+    - match: Host(`adguardhome.${domain}`)
       services:
         - name: adguardhome-adguard-home
           namespace: adguardhome

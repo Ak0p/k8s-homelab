@@ -19,8 +19,8 @@ spec:
       auth:
         htpasswd_encryption: bcrypt
         users:
-          - username: andrei
-            password: L*Y!trs^%4%hO4ytZh1r
+          - username: ${radicale_username}
+            password: ${radicale_password}
     securityContext:
       pod:
         fsGroupChangePolicy: "Always"
