@@ -22,11 +22,11 @@ spec:
     ingressRoute:
       dashboard:
         enabled: true
-        matchRule: Host(`traefik.akop.ro`)
+        matchRule: Host(`traefik.${domain}`)
         entryPoints:
           - web
     service:
       single: true
       annotations:
         metallb.io/loadBalancerIPs: 192.168.1.196
-        external-dns.alpha.kubernetes.io/hostname: traefik.akop.ro
+        external-dns.alpha.kubernetes.io/hostname: traefik.${domain}

@@ -12,7 +12,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`calendar.akop.ro`)
+      match: Host(`calendar.${domain}`)
       services:
         - kind: Service
           name: radicale

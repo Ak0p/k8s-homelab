@@ -11,7 +11,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`s3-rustfs.akop.ro`)
+    - match: Host(`s3-rustfs.${domain}`)
       services:
         - name: rustfs-svc
           namespace: rustfs
@@ -25,13 +25,13 @@ metadata:
   name: rustfs-dash-route
   namespace: traefik
   annotations:
-    external-dns.alpha.kubernetes.io/target: traefik-backup.akop.ro
+    external-dns.alpha.kubernetes.io/target: traefik-backup.${domain}
     kubernetes.io/ingress.class: traefik
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`dash-rustfs.akop.ro`)
+    - match: Host(`dash-rustfs.${domain}`)
       services:
         - name: rustfs-svc
           namespace: rustfs

@@ -12,7 +12,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`immich.akop.ro`)
+      match: Host(`immich.${domain}`)
       services:
         - kind: Service
           name: immich-server

@@ -11,7 +11,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`dav.sftpgo.akop.ro`)
+      match: Host(`dav.sftpgo.${domain}`)
       services:
         - kind: Service
           name: sftpgo-webdavport
@@ -33,7 +33,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`dash.sftpgo.akop.ro`)
+      match: Host(`dash.sftpgo.${domain}`)
       services:
         - kind: Service
           name: sftpgo

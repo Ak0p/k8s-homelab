@@ -8,4 +8,4 @@
 
 - op: replace
   path: /spec/values/ingressRoute/dashboard/matchRule
-  value: Host(`traefik-backup.akop.ro`)
+  value: Host(`traefik-backup.${domain}`)
