@@ -4,5 +4,4 @@ resources:
   - release.yml
   - clusterissuer.yml
   - cloudflare-apikey-secret.yml
-  - domain-creds-secret.yml
   - certificates.yml

@@ -23,5 +23,3 @@ spec:
     substituteFrom:
       - kind: Secret
         name: domain-creds
-      - kind: Secret
-        name: radicale-creds

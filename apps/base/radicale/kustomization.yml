@@ -2,4 +2,3 @@ resources:
   - namespace.yml
   - release.yml
   - routes.yml
-  - radicale-creds-secret.yml
