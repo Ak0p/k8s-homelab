@@ -19,5 +19,5 @@ spec:
       name: sops-age
   postBuild:
     substituteFrom:
-      - kind: ConfigMap
+      - kind: Secret
         name: domain-creds
