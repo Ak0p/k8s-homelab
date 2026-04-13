@@ -9,7 +9,7 @@ spec:
   interval: 5m
   chart:
     spec:
-      chart: amd-gpu-operator
+      chart: gpu-operator-charts
       version: 1.4.1
       sourceRef:
         kind: HelmRepository
