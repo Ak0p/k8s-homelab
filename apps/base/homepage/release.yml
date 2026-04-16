@@ -15,6 +15,13 @@ spec:
         name: truecharts
         namespace: truecharts
   values:
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                HOMEPAGE_ALLOWED_HOSTS: home.akop.ro,localhost
     forceConfigFromValues: true
     persistence:
       config:
