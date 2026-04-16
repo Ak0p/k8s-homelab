@@ -23,6 +23,6 @@ spec:
         accessModes: ReadWriteMany
         size: 10Gi
         storageClass: host-zfs-files
-    homeassitant:
+    homeassistant:
       trusted_proxies:
         - 10.244.0.0/16
