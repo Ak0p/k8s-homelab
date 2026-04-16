@@ -17,6 +17,6 @@ spec:
         - kind: Service
           name: homepage
           namespace: homepage
-          port: 5232
+          port: 10352
   tls:
     secretName: wildcard-certificate-secret
