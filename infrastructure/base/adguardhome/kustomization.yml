@@ -1,0 +1,5 @@
+resources:
+  - namespace.yml
+  - release.yml
+  - routes.yml
+  - configmap.yml

@@ -1,0 +1,11 @@
+resources:
+  - ../../base/sources
+  - ../../base/openebs
+  - ../../base/cnpg
+  - ../../base/traefik
+  - ../../base/metallb
+  - ../../base/cert-manager
+  - ../../base/adguardhome
+  - ../../base/velero
+  - ../../base/external-dns
+  - ../../base/amd-gpu-operator

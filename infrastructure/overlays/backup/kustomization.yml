@@ -1,0 +1,59 @@
+resources:
+  - ../../base/metallb
+  - ../../base/cert-manager
+  - ../../base/traefik
+  - ../../base/rustfs
+  - ../../base/openebs
+  - ../../base/external-dns
+  - ../../base/sources
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: traefik
+    path: patches/traefik-release.yml
+
+  - target:
+      kind: L2Advertisement
+      name: traefik
+    path: patches/l2-advertisement.yml
+  - target:
+      kind: IPAddressPool
+      name: traefik
+    patch: |-
+      - op: replace
+        path: /spec/addresses
+        value:
+          - 192.168.1.102/32
+
+  - target:
+      kind: StorageClass
+      name: host-zfs-standard
+    patch: |-
+      - op: replace
+        path: /parameters/poolname
+        value: "tank"
+
+  - target:
+      kind: StorageClass
+      name: host-zfs-files
+    patch: |-
+      - op: replace
+        path: /parameters/poolname
+        value: "tank"
+
+  - target:
+      kind: HelmRelease
+      name: external-dns
+    patch: |-
+      - op: replace
+        path: /spec/values/txtOwnerId
+        value: backup-cluster
+
+  - target:
+      kind: Secret
+      name: adguard-configuration
+    patch: |-
+      - op: replace
+        path: /spec/stringData/url
+        value: adguardhome.${domain}

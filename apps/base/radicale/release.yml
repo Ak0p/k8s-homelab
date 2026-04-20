@@ -1,0 +1,48 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+    name: radicale
+    namespace: radicale
+spec:
+    interval: 5m
+    chart:
+        spec:
+            chart: radicale
+            version: 8.17.2
+            sourceRef:
+                kind: HelmRepository
+                name: truecharts
+                namespace: truecharts
+    values:
+        radicale:
+            auth:
+                htpasswd_encryption: bcrypt
+                users:
+                    - username: andrei
+                      password: L*Y!trs^%4%hO4ytZh1r
+        securityContext:
+            pod:
+                fsGroupChangePolicy: Always
+        persistence:
+            data:
+                enabled: ENC[AES256_GCM,data:O1RhKw==,iv:z11V0DdR6Fbj9cfnKMFHRG1ppjyr9VFF1tl8xokZ4IE=,tag:PVV1fa1foiZhF8oWfL+MOA==,type:bool]
+                type: ENC[AES256_GCM,data:8jYA,iv:Q545YDqmUg1mg+tiVwBsdewTNKP7MGE3bUZogzn4ZaI=,tag:V1OQwCPqMlFwi+DRSlukJw==,type:str]
+                retain: ENC[AES256_GCM,data:5F9S5g==,iv:J/9EoE29i4M2MY6Ah1Og3b89s/2nkYQIEJF8cZjQ+SI=,tag:vN9ID7q86wrFkNTqmnnvrw==,type:bool]
+                accessModes: ENC[AES256_GCM,data:Q42Fim86vuZAsPioyg==,iv:rhzHQmfi81nEgImlN0xCsd9SSqYhl/1zU7EN46hVrj4=,tag:Sr2a4agpxuYjLIN5G+mjxw==,type:str]
+                size: ENC[AES256_GCM,data:EhbN,iv:03JNfr0Kelh4tlABnxC66hBhpNHDi21bhJy94cKrl0Y=,tag:s4nnUNp9wsPX1xZFLYx+bQ==,type:str]
+                storageClass: ENC[AES256_GCM,data:5IJuR8iQszjxPdnE1gw=,iv:FaT0HEnYUqGsQZ/x+P33xr/NQ4p9icooFq7fNFH1iAc=,tag:03b8NgWI0Mv39EM9lVrUeQ==,type:str]
+sops:
+    age:
+        - recipient: age1e8fc5nkphytyt3m2cj0g4th6cxx643pthwyq6xvha28jkpy27clq8uyax7
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBHSWV4WHQ0RGdQUjdVUGcz
+            Lzg3aW1zL2hTdStyUGs0ZGVMYmNNL3IzMlZRCjNDSUFqUTZDbzhrQ3Mrb0xLMDJP
+            SmRZd3hFeFJKam9EWXROWUJLMkl4VE0KLS0tIDhvRGpUYmhwaFVsZFc1NlVxVlRQ
+            UUtNQ1VuT09zQkhHSUVSd2JvSmZyUE0KZ+RUXSxaEu1oVlJ9NFY3iye5hpkgILY1
+            stBrKernOdGCyKG+1864zlEdZUI2aIs8Eae/MGXoEgFxUFvvwmSogw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-04-13T16:26:15Z"
+    mac: ENC[AES256_GCM,data:eW6+5WcYRasoq2NaIBTLVIsQNNMlqdoCMtDuCcmhavG9gsY6FWN9azXw+5ZqO0GbN47yOn7JzJG3d4p6U8lrbjn9yxAbhsVyW3eTp4RajeZrYg2dJWbJ/YMAwLvMU026HieoacHb4wJhqSC84SKbrlwUZpQLDRqNFqMaprk7r0U=,iv:3pOJDk4l+ahBwhglK5s+8x+YA4JAduEZEgcUtah47bA=,tag:GVgnOTQCyxXsqIYunx+oMw==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.12.2

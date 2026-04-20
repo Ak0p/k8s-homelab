@@ -1,0 +1,13 @@
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: traefik
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - traefik
+  nodeSelectors:
+    - matchLabels:
+        kubernetes.io/hostname: talos-5at-i15
+  interfaces:
+    - enp34s0

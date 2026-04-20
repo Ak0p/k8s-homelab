@@ -1,0 +1,13 @@
+- op: add
+  path: /spec/values/ports
+  value:
+    sftp:
+      port: 2022
+      protocol: TCP
+      expose:
+        default: true
+    ftp:
+      port: 2121
+      protocol: TCP
+      expose:
+        default: false

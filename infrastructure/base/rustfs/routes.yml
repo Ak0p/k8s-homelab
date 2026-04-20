@@ -1,0 +1,40 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: rustfs-storage-route
+  namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.102
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`s3-rustfs.${domain}`)
+      services:
+        - name: rustfs-svc
+          namespace: rustfs
+          port: 9000
+  tls:
+    secretName: rustfs-storage-certificate-secret
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: rustfs-dash-route
+  namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/target: traefik-backup.${domain}
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`dash-rustfs.${domain}`)
+      services:
+        - name: rustfs-svc
+          namespace: rustfs
+          port: 9001
+  tls:
+    secretName: rustfs-storage-certificate-secret

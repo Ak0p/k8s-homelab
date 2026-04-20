@@ -1,0 +1,78 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: velero
+  namespace: velero
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: velero
+      version: 12.0.0
+      sourceRef:
+        kind: HelmRepository
+        name: velero
+        namespace: velero
+
+  values:
+    namespace:
+      labels:
+        pod-security.kubernetes.io/enforce: privileged
+        pod-security.kubernetes.io/enforce-version: latest
+        pod-security.kubernetes.io/audit: privileged
+        pod-security.kubernetes.io/audit-version: latest
+        pod-security.kubernetes.io/warn: privileged
+        pod-security.kubernetes.io/warn-version: latest
+
+    deployNodeAgent: true
+    nodeAgent:
+      disableHostPath: true
+
+    configuration:
+      features: EnableCSI
+      defaultVolumesToFsBackup: false
+
+      backupStorageLocation:
+        - name: minio
+          provider: aws
+          bucket: velero-backup
+          credential:
+            name: s3-creds
+            key: credentials
+          default: true
+          config:
+            region: minio
+            s3ForcePathStyle: "true"
+            s3Url: https://s3-rustfs.${domain}
+            insecureSkipTLSVerify: "true"
+
+      volumeSnapshotLocation:
+        - name: minio
+          provider: openebs.io/zfspv-blockstore
+          config:
+            namespace: openebs
+            prefix: zfs
+            bucket: velero-backup
+            provider: aws
+            region: minio
+            credential:
+              name: s3-creds
+              key: credentials
+            s3ForcePathStyle: "true"
+            s3Url: https://s3-rustfs.${domain}
+            insecureSkipTLSVerify: "true"
+
+    initContainers:
+      - name: velero-plugin-for-aws
+        image: velero/velero-plugin-for-aws:v1.13.1
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - mountPath: /target
+            name: plugins
+      - name: velero-plugin-for-openebs
+        image: openebs/velero-plugin:3.6.0
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - mountPath: /target
+            name: plugins

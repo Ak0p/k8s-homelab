@@ -1,0 +1,27 @@
+version: v1alpha1
+machine:
+  # Enable ZFS kernel module
+  kernel:
+    modules:
+      - name: zfs
+  kubelet:
+    extraArgs:
+      rotate-server-certificates: true
+
+  # Allow MetalLB to handle load balancing at the cluster level
+  features:
+    nodeLabels: {}
+cluster:
+  cni:
+    name: flannel
+
+  apiServer:
+    certSANs:
+      - 192.168.1.112
+
+  extraManifests:
+    # Metrics Server
+    - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
+    - https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+  allowSchedulingOnControlPlanes: true

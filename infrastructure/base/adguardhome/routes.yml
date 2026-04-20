@@ -1,0 +1,19 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: adguardhome-ui
+  namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.196
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`adguardhome.${domain}`)
+      services:
+        - name: adguardhome-adguard-home
+          namespace: adguardhome
+          port: 10232
+  tls:
+    secretName: wildcard-certificate-secret

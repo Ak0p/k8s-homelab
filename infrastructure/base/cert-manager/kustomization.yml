@@ -1,0 +1,7 @@
+resources:
+  - namespace.yml
+  - repository.yml
+  - release.yml
+  - clusterissuer.yml
+  - cloudflare-apikey-secret.yml
+  - certificates.yml

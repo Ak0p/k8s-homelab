@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: truecharts
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: truecharts
+  namespace: truecharts
+spec:
+  interval: 1h
+  type: oci
+  url: oci://oci.trueforge.org/truecharts/

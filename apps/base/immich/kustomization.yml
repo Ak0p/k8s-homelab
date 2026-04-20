@@ -1,0 +1,7 @@
+resources:
+  - release.yml
+  - repository.yml
+  - namespace.yml
+  - pvc.yml
+  - cluster-release.yml
+  - routes.yml

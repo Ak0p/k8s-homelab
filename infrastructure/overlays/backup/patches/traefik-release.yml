@@ -1,0 +1,11 @@
+- op: replace
+  path: /spec/values/service/single
+  value: true
+
+- op: replace
+  path: /spec/values/service/annotations/metallb.io~1loadBalancerIPs
+  value: 192.168.1.102
+
+- op: replace
+  path: /spec/values/ingressRoute/dashboard/matchRule
+  value: Host(`traefik-backup.${domain}`)
