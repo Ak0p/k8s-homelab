@@ -122,40 +122,11 @@ A minimal second cluster. Runs only RustFS to provide S3-compatible object stora
 
 ## Deployment
 
-### Prerequisites
-- A running Talos Linux cluster with ZFS pools configured on the nodes
-- `kubectl`, `flux`, `talosctl`, and `sops` CLIs installed
-- A Cloudflare account with an API token for DNS-01 ACME challenges
-- An `age` key pair for SOPS encryption
+1. Deploy the **SOPS** private key manually. It will be used by Flux to decrypt all encrypted fields in from the Secrets present in the repo.
 
-### Steps
+2.  Bootstrap Flux via the CLI into the specific `clusters/<cluster-name>/` directory. From there, two Flux Kustomizations are utilized to bridge the gap:
 
-1. **Deploy the SOPS private key** as a Kubernetes Secret in the `flux-system` namespace. Flux will use it to decrypt all encrypted secrets in the repository.
-
-   ```sh
-   kubectl create secret generic sops-age \
-     --namespace=flux-system \
-     --from-file=age.agekey=/path/to/age.key
-   ```
-
-2. **Bootstrap Flux** pointing at the appropriate cluster directory:
-
-   ```sh
-   flux bootstrap github \
-     --owner=<github-user> \
-     --repository=homelab \
-     --path=clusters/main \
-     --personal
-   ```
-
-   Flux will install itself and begin reconciling the repository. The `cluster-secrets` Kustomization runs first, followed by `infrastructure`, then `apps`.
-
-3. **Verify reconciliation**:
-
-   ```sh
-   flux get kustomizations
-   flux get helmreleases -A
-   ```
+3. Infrastructure Sync: Reconciles all manifests within infrastructure/base.
 
 4. Apps Sync: Reconciles all manifests within apps/base.
 
