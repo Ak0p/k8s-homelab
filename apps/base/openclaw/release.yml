@@ -1,0 +1,17 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openclaw
+  namespace: openclaw-operator-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: openclaw
+      version: 0.36.5
+      sourceRef:
+        kind: HelmRepository
+        name: openclaw-operator
+        namespace: openclaw-operator-system
+  values: {}

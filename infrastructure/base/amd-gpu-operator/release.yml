@@ -1,0 +1,42 @@
+# yaml
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: amd-gpu-operator
+  namespace: amd-gpu-operator
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: gpu-operator-charts
+      version: 1.4.1
+      sourceRef:
+        kind: HelmRepository
+        name: amd-gpu-operator
+        namespace: amd-gpu-operator
+  values:
+    # DO NOT install NFD (already deployed independently)
+    node-feature-discovery:
+      enabled: false
+
+    # Enable KMM but we won't use it for driver installation (using Talos built-in driver)
+    # KMM CRDs are required by the operator even if not managing drivers
+    kmm:
+      enabled: true
+
+    # DeviceConfig - configure driver and metrics
+    deviceConfig:
+      spec:
+        # DO NOT install driver (already in Talos via amdgpu extension)
+        driver:
+          enable: false
+
+        # Enable metrics exporter
+        # ServiceMonitor is disabled - using manual VMServiceScrape in amd-gpu-metrics-scrape.yaml instead
+        # to maintain control over relabeling (cluster_name=talos)
+        metricsExporter:
+          enable: true
+          prometheus:
+            serviceMonitor:
+              enable: false

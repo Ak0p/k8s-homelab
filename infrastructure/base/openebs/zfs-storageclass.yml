@@ -1,0 +1,33 @@
+# Storage class for random application files
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: host-zfs-standard
+provisioner: zfs.csi.openebs.io
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+parameters:
+  recordsize: "128k"
+  compression: "lz4"
+  dedup: "off"
+  fstype: "zfs"
+  shared: "yes" # to enable ReadWriteMany access mode
+  poolname: "fast"
+---
+# Storage class for file storage (documents, photos, videos, etc)
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: host-zfs-files
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: zfs.csi.openebs.io
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+parameters:
+  recordsize: "1M"
+  compression: "lz4"
+  dedup: "off"
+  fstype: "zfs"
+  shared: "yes" # to enable ReadWriteMany access mode
+  poolname: "slow"

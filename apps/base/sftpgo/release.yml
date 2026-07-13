@@ -1,0 +1,51 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: sftpgo
+  namespace: sftpgo
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: sftpgo
+      version: 9.18.0
+      sourceRef:
+        kind: HelmRepository
+        name: sftpgo
+        namespace: sftpgo
+  values:
+    service:
+      sftpport:
+        enabled: true
+        type: LoadBalancer
+        annotations:
+          metallb.io/address-pool: default
+          external-dns.alpha.kubernetes.io/hostname: sftp.sftpgo.${domain}
+      ftpport:
+        enabled: false
+    persistence:
+      backupdirectory:
+        enabled: true
+        type: pvc
+        accessModes: ReadWriteMany
+        size: 500Gi
+        storageClass: host-zfs-files
+      configpath:
+        enabled: true
+        type: pvc
+        size: 500Mi
+        storageClass: host-zfs-files
+      data:
+        enabled: true
+        type: pvc
+        retain: true
+        accessModes: ReadWriteMany
+        size: 500Gi
+        storageClass: host-zfs-files
+      shareaccess:
+        enabled: true
+        type: pvc
+        accessModes: ReadWriteMany
+        size: 100Gi
+        storageClass: host-zfs-files

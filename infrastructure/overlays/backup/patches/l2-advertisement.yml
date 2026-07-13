@@ -1,0 +1,8 @@
+- op: replace
+  path: /spec/nodeSelectors/0/matchLabels/kubernetes.io~1hostname
+  value: talos-llq-9ec
+
+- op: replace
+  path: /spec/interfaces
+  value:
+    - enp0s31f6

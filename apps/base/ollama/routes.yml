@@ -1,0 +1,22 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ollama-route
+  namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/target: traefik.${domain}
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`ollama.${domain}`)
+      services:
+        - kind: Service
+          name: ollama
+          namespace: ollama
+          port: 11434
+  tls:
+    secretName: wildcard-certificate-secret

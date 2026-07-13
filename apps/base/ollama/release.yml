@@ -1,0 +1,57 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ollama
+  namespace: ollama
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: ollama
+      version: 1.63.0
+      sourceRef:
+        kind: HelmRepository
+        name: otwld
+        namespace: flux-system
+  values:
+    labels:
+      pod-security.kubernetes.io/enforce: privileged
+      pod-security.kubernetes.io/enforce-version: latest
+      pod-security.kubernetes.io/audit: privileged
+      pod-security.kubernetes.io/audit-version: latest
+      pod-security.kubernetes.io/warn: privileged
+      pod-security.kubernetes.io/warn-version: latest
+    ollama:
+      gpu:
+        enabled: true
+        type: amd
+    models:
+      pull:
+        - qwen3.5
+        - gemma4
+
+    persistentVolume:
+      enabled: true
+      accessModes:
+        - ReadWriteMany
+      size: 200Gi
+      storageClass: host-zfs-files
+
+    volumes:
+      # REQUIRED: DRI (Direct Rendering Infrastructure) for GPU access
+      - name: dri-devices
+        hostPath:
+          path: /dev/dri
+      # REQUIRED FOR AMD: KFD (Kernel Fusion Driver) for AMD GPU compute
+      - name: kfd-device
+        hostPath:
+          path: /dev/kfd
+
+    volumeMounts:
+      # REQUIRED: Mount DRI devices into container
+      - name: dri-devices
+        mountPath: /dev/dri
+      # REQUIRED FOR AMD: Mount KFD device into container
+      - name: kfd-device
+        mountPath: /dev/kfd

@@ -1,0 +1,5 @@
+resources:
+  - namespace.yml
+  - repository.yml
+  - release.yml
+  - adguard-configuration-secret.yml
