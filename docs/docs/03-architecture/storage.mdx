@@ -1,0 +1,54 @@
+---
+sidebar_position: 3
+---
+
+# Storage Architecture
+
+Storage is provided by [OpenEBS](https://openebs.io/) using the ZFS local PV engine. Persistent volumes are backed by ZFS datasets on the node's local disks.
+
+## OpenEBS + ZFS
+
+OpenEBS uses the ZFS driver to provision persistent volumes. Each volume is a ZFS dataset with configurable properties (record size, compression, etc.).
+
+**Key components** (`infrastructure/base/openebs/`):
+
+- **Helm chart**: `openebs` from the OpenEBS Helm repository
+- **ZFS local PV engine**: Provisions volumes from ZFS datasets
+- **VolumeSnapshotClass**: `zfs-snapshot-class` with `zfs.csi.openebs.io` driver and `Retain` deletion policy, used by Velero for CSI snapshots
+
+## StorageClasses
+
+Two StorageClasses are defined in `infrastructure/base/openebs/zfs-storageclass.yml`:
+
+| StorageClass | Record Size | ZFS Pool | Use Case | Default |
+|---|---|---|---|---|
+| `host-zfs-standard` | 128K | `fast` | Databases, small files | No |
+| `host-zfs-files` | 1M | `slow` | Media, documents, large files | **Yes** |
+
+Both StorageClasses share these properties:
+
+- `allowVolumeExpansion: true`
+- `reclaimPolicy: Retain`
+- `compression: lz4`
+- `shared: "yes"` — Enables `ReadWriteMany` access mode
+
+### Pool Details
+
+ZFS can be set up on Talos nodes by enabling the ZFS kernel module in the Talos machine configuration. Creating the pool or pools in my use case can be done by spinning up a container with system permissions. The full guide is available in this [blog post](https://www.roosmaa.net/blog/2024/setting-up-zfs-on-talos/).
+
+## PVC Patterns
+
+Applications use PVCs in one of two patterns:
+
+- **Persistent (retain: true)** — Data survives Helm release deletion. Used by most applications (Actual, Homepage, Home Assistant, etc.)
+- **Ephemeral (retain: false)** — Data is deleted with the release. Used by some applications
+
+All PVCs use `ReadWriteMany` access mode, allowing multiple pods to access the same volume simultaneously.
+
+## Backups
+
+OpenEBS integrates with Velero via CSI VolumeSnapshots. The `VolumeSnapshotClass` (`zfs-snapshot-class`) is used by Velero to take ZFS-native snapshots of persistent volumes during backup. See [Backup & Restore](../08-operations/backup-restore.mdx) for details.
+
+## Storage Allocation
+
+> **Note:** I don't have a complete picture of every PVC's size and purpose across all applications. The individual application pages document each app's persistent storage configuration where available.

@@ -1,0 +1,8 @@
+{
+  "label": "Talos",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "description": "Talos Linux machine configuration and upgrade procedures."
+  }
+}

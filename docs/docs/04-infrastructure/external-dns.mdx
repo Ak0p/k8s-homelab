@@ -1,0 +1,47 @@
+---
+sidebar_position: 8
+---
+
+# ExternalDNS
+
+ExternalDNS automatically creates and updates DNS records in AdGuard Home based on `IngressRoute` annotations. When a new application is deployed, its DNS record is created without any manual intervention.
+
+## Configuration
+
+**File**: `infrastructure/base/external-dns/`    
+**Chart**: `external-dns` version `1.20.0` from `https://kubernetes-sigs.github.io/external-dns`  
+**Namespace**: `external-dns`
+
+### Key Values
+
+```yaml
+sources:
+  - traefik-proxy    # Watch Traefik IngressRoutes
+  - service           # Also watch Services
+txtOwnerId: main-cluster
+policy: sync           # Automatically create/update/delete records
+provider:
+  name: webhook
+  webhook:
+    image:
+      repository: ghcr.io/muhlba91/external-dns-provider-adguard
+```
+
+## How It Works
+
+1. An application defines a `Traefik IngressRoute` with the annotation:
+   ```yaml
+   annotations:
+     external-dns.alpha.kubernetes.io/target: traefik.<domain>
+   ```
+2. ExternalDNS detects the new IngressRoute
+3. ExternalDNS calls the AdGuard Home webhook provider to create an A record
+4. The DNS record points to the Traefik LoadBalancer IP
+
+## AdGuard Home Provider
+
+ExternalDNS uses the [AdGuard Home webhook provider](https://github.com/muhlba91/external-dns-provider-adguard) which communicates with the AdGuard Home API. The API credentials are stored as a SOPS-encrypted secret in `adguard-configuration-secret.yml`.
+
+## Ownership
+
+The `txtOwnerId: main-cluster` setting ensures that ExternalDNS only manages records it created, preventing conflicts with manually created DNS records.

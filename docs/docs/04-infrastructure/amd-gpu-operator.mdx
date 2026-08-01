@@ -1,0 +1,41 @@
+---
+sidebar_position: 10
+---
+
+# AMD GPU Operator
+
+The AMD GPU operator enables GPU-accelerated workloads on the cluster. It is used by Ollama for LLM inference.
+
+## Configuration
+
+**File**: `infrastructure/base/amd-gpu-operator/`    
+**Chart**: `gpu-operator-charts` version `1.4.1`  
+**Namespace**: `amd-gpu-operator`
+
+### Key Values
+
+```yaml
+node-feature-discovery:
+  enabled: false      # NFD is deployed independently
+kmm:
+  enabled: true       # KMM CRDs are required by the operator
+deviceConfig:
+  spec:
+    driver:
+      enable: false   # AMD GPU driver is built into Talos (amdgpu extension)
+    metricsExporter:
+      enable: true     # Enable GPU metrics
+      prometheus:
+        serviceMonitor:
+          enable: false  # Using manual VMServiceScrape instead
+```
+
+## Architecture
+
+- **Driver**: The AMD GPU driver is built into the Talos Linux kernel via the `amdgpu` extension — the operator does not manage it
+- **Metrics**: The metrics exporter collects GPU utilization, memory, and temperature data
+- **Prometheus**: Metrics are scraped via a custom VMServiceScrape (not the built-in ServiceMonitor), allowing for custom relabeling (e.g., adding `cluster_name=talos`)
+
+## Node Feature Discovery
+
+> **Note:** The `node-feature-rule.yml` file in the operator directory likely contains the NodeFeatureRule for detecting AMD GPUs on nodes. NFD itself is deployed independently rather than as a subchart of the operator.

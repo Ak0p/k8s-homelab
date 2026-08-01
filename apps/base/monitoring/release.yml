@@ -1,0 +1,43 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: prometheus-stack
+  namespace: monitoring
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      version: 87.19.1
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+  values:
+    alertmanager:
+      enabled: false
+    grafana:
+      enabled: true
+      admin:
+        existingSecret: grafana-admin-credentials
+    prometheus:
+      prometheusSpec:
+        initContainers:
+          - name: fix-permissions
+            image: busybox
+            command: ["sh", "-c", "chown -R 1000:2000 /prometheus"]
+            volumeMounts:
+              - name: prometheus-prometheus-stack-kube-prom-prometheus-db
+                mountPath: /prometheus
+            securityContext:
+              runAsUser: 0
+              runAsNonRoot: false
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: host-zfs-standard
+              accessModes: ["ReadWriteMany"]
+              resources:
+                requests:
+                  storage: 50Gi

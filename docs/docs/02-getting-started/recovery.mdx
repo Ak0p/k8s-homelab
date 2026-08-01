@@ -1,0 +1,68 @@
+---
+sidebar_position: 3
+---
+
+# Recovery
+
+In the event of a cluster failure, follow these steps to restore from backup.
+
+## Prerequisites
+
+- A working Talos cluster (or a fresh install following the [deployment guide](./deployment)).
+- The SOPS private key (deployed in the `flux-system` namespace).
+- Access to the S3-compatible backup storage (RustFS on the backup cluster).
+
+## Restore Process
+
+1. **Install Talos** on the replacement nodes (if needed) using the same machine configuration.
+
+2. **Install OpenEBS** with the ZFS StorageClasses. The StorageClasses are defined in `infrastructure/base/openebs/zfs-storageclass.yml`:
+   - `host-zfs-standard` — 128k record size, for databases
+   - `host-zfs-files` — 1M record size, for media and files
+
+3. **Deploy Velero** with the same `BackupStorageLocation` and `VolumeSnapshotLocation` configuration pointing to your backup storage.
+
+4. **Restore from Velero backup:**
+   ```bash title=""
+   velero restore create --from-backup <backup-name> --wait
+   ```
+
+5. **Restore Flux** by bootstrapping it again (see [Deployment](./deployment#3-bootstrap-flux)). Flux will reconcile the cluster state to match Git.
+
+## Backup Schedule
+
+Velero is configured to run daily at midnight with a 30-day retention period. The backup includes:
+
+- All namespace resources
+- CSI volume snapshots (via the OpenEBS Velero plugin)
+
+Backups are stored on RustFS (an S3-compatible server running on the backup cluster).
+
+
+```yaml title="infrastructure/base/velero/schedule.yml"
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: daily-backup
+  namespace: velero
+spec:
+  schedule: "0 0 * * *"
+  template:
+    includedNamespaces:
+      - "*"
+    snapshotVolumes: true
+    snapshotMoveData: true
+    ttl: 720h0m0s
+```
+
+Velero backups require a valid VolumeSnaphotClass in order to create incremental snapshots of the OpenEBS ZFS volumes.
+```yaml title="infrastructure/base/velero/volume-snapshot-class.yml"
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshotClass
+metadata:
+  name: zfs-snapshot-class
+  labels:
+    velero.io/csi-volumesnapshot-class: "true"
+driver: zfs.csi.openebs.io
+deletionPolicy: Retain
+```

@@ -7,3 +7,4 @@ resources:
   - ../../base/actual
   - ../../base/linkwarden
   - ../../base/ollama
+  - ../../base/monitoring

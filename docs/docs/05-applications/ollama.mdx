@@ -1,0 +1,63 @@
+---
+sidebar_position: 9
+---
+
+# Ollama
+
+Ollama is an LLM (Large Language Model) inference server. It runs GPU-accelerated models using the AMD GPU operator.
+
+## Configuration
+
+**File**: `apps/base/ollama/`    
+**Chart**: `ollama` version `1.63.0` from `otwld`  
+**Namespace**: `ollama`
+
+### Key Values
+
+```yaml
+ollama:
+  gpu:
+    enabled: true
+    type: amd
+models:
+  pull:
+    - qwen3.5
+    - gemma4
+persistentVolume:
+  enabled: true
+  accessModes:
+    - ReadWriteMany
+  size: 200Gi
+  storageClass: host-zfs-files
+volumes:
+  - name: dri-devices
+    hostPath:
+      path: /dev/dri          # Direct Rendering Infrastructure
+  - name: kfd-device
+    hostPath:
+      path: /dev/kfd          # AMD Kernel Fusion Driver
+labels:
+  pod-security.kubernetes.io/enforce: privileged
+```
+
+### GPU Acceleration
+
+Ollama requires privileged pod access for GPU compute:
+
+- `amd.type: amd` — Targets AMD GPUs
+- `/dev/dri` — Direct Rendering Infrastructure for GPU access
+- `/dev/kfd` — AMD Kernel Fusion Driver for compute operations
+
+### Models
+
+Two models are configured to be pulled on startup:
+
+- `qwen3.5` — Qwen 3.5 (general purpose LLM)
+- `gemma4` — Gemma 4 (Google's lightweight model)
+
+## External Links
+
+- [Ollama Website](https://ollama.com/)
+- [Ollama GitHub](https://github.com/ollama/ollama)
+- [Qwen Models](https://qwenlm.github.io/)
+- [Gemma Models](https://ai.google.dev/gemma)

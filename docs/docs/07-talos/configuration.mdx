@@ -1,0 +1,86 @@
+---
+sidebar_position: 7
+---
+
+# Talos Configuration
+
+[Talos Linux](https://www.talos.dev/) is the operating system running on every Kubernetes node. It is immutable and API-driven — there is no SSH, no package manager, and no shell on the nodes.
+
+## Machine Configuration
+
+**File**: `talos/main/machine-overlay.yml`
+
+### Kernel Modules
+
+```yaml
+machine:
+  kernel:
+    modules:
+      - name: zfs
+```
+
+The ZFS kernel module is loaded to support the OpenEBS ZFS storage backend.
+
+### Kubelet
+
+```yaml
+machine:
+  kubelet:
+    extraArgs:
+      rotate-server-certificates: true
+```
+
+Automatic certificate rotation for the kubelet.
+
+### Node Labels
+
+```yaml
+machine:
+  features:
+    nodeLabels: {}
+```
+
+No custom node labels are configured.
+
+### CNI
+
+```yaml
+cluster:
+  cni:
+    name: flannel
+```
+
+Flannel is used as the Container Network Interface.
+
+### API Server
+
+```yaml
+cluster:
+  apiServer:
+    certSANs:
+      - <node-ip>
+```
+
+The API server certificate includes the node IP as a Subject Alternative Name, allowing `kubectl` connections via the node IP.
+
+### Scheduling
+
+```yaml
+cluster:
+  allowSchedulingOnControlPlanes: true
+```
+
+In this small-cluster setup, workloads are allowed to run on the control-plane node.
+
+### Extra Manifests
+
+```yaml
+cluster:
+  extraManifests:
+    - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
+    - https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+
+Two additional components are deployed at cluster bootstrap:
+- **kubelet-serving-cert-approver** — Automatically approves kubelet serving certificate requests
+- **Metrics Server** — Provides resource metrics (CPU, memory) for `kubectl top` and HPA

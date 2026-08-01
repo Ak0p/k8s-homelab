@@ -1,0 +1,41 @@
+---
+sidebar_position: 2
+---
+
+# cert-manager
+
+cert-manager automates the provisioning and renewal of TLS certificates. It uses the ACME DNS-01 challenge via the Cloudflare API to issue Let's Encrypt wildcard certificates.
+
+## Configuration
+
+**File**: `infrastructure/base/cert-manager/`    
+**Chart**: `cert-manager` version `1.19.4` from `https://charts.jetstack.io`  
+**Namespace**: `cert-manager`
+
+### Key Values
+
+```yaml
+crds:
+  enabled: true  # CRDs are installed by the chart
+```
+
+## ClusterIssuer
+
+Defined in `infrastructure/base/cert-manager/clusterissuer.yml`:
+
+- **Name**: `letsencrypt`
+- **Type**: ACME DNS-01 via Cloudflare
+- **Server**: `https://acme-v02.api.letsencrypt.org/directory`
+- **API Token**: Referenced from `cloudflare-apikey-secret` (SOPS-encrypted)
+
+## Certificates
+
+Defined in `infrastructure/base/cert-manager/certificates.yml`:
+
+| Certificate | DNS Names | Secret Name | Used By |
+|---|---|---|---|
+| `wildcard-certificate` | `*.<domain>` | `wildcard-certificate-secret` | Most applications |
+| `storage-certificate` | `*.sftpgo.<domain>` | `storage-certificate-secret` | SFTPGo subdomains |
+| `rustfs-storage-certificate` | `*.rustfs.<domain>` | `rustfs-storage-certificate-secret` | RustFS S3 endpoint |
+
+All certificates are stored as Kubernetes Secrets in the `traefik` namespace and are consumed by Traefik IngressRoutes via `tls.secretName`.

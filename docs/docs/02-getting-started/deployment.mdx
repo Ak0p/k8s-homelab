@@ -1,0 +1,69 @@
+---
+sidebar_position: 2
+---
+
+# Deployment
+
+## 1. Install Talos Linux
+
+Follow the [Talos Linux Quickstart](https://www.talos.dev/latest/introduction/quickstart/) to install Talos on your nodes. The machine configuration is defined in `talos/main/machine-overlay.yml` and includes:
+
+- ZFS kernel module enabled
+- Flannel CNI
+- Metrics Server (via extra manifests)
+- Scheduling allowed on control-plane nodes
+- API server certificate SANs for the node IP
+
+```bash
+talosctl apply-config --talosconfig talosconfig --nodes <node-ip> --file machineconfig.yaml
+```
+
+## 2. Deploy the SOPS Private Key
+
+Before Flux can decrypt secrets, the age private key must be present on the cluster:
+
+```bash
+kubectl create namespace flux-system
+kubectl create secret generic sops-age \
+  --namespace flux-system \
+  --from-file=age.agekey=/path/to/private/key
+```
+
+> The private key is **not** stored in this repository. It is distributed out-of-band.
+
+## 3. Bootstrap Flux
+
+```bash
+flux bootstrap github \
+  --token-auth \
+  --owner=my-github-username \
+  --repository=my-repository-name \
+  --branch=main \
+  --path=clusters/my-cluster \
+  --personal \
+  --components-extra=image-reflector-controller,image-automation-controller # Extra components for automated image updates
+```
+
+This creates the `flux-system` namespace, deploys the Flux controllers, and creates the initial `GitRepository` CRD that points to this repository.
+
+## 4. Flux Reconciliation
+
+Once bootstrapped, Flux picks up the Kustomizations defined in `clusters/main/`:
+
+| Kustomization | Path | Depends On |
+|---|---|---|
+| `cluster-secrets` | `./secrets/base` | — |
+| `infrastructure` | `./infrastructure/overlays/main` | `cluster-secrets` |
+| `apps` | `./apps/overlays/main` | `infrastructure` |
+
+Flux automatically reconciles in this order. Monitor progress with:
+
+```bash
+flux get kustomizations --watch
+```
+
+## 5. Verify
+
+- Check that all pods are running: `kubectl get pods -A`
+- Access the Traefik dashboard at the configured domain
+- Verify TLS certificates are issued: `kubectl get certificates -A`

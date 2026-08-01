@@ -1,0 +1,8 @@
+{
+  "label": "Infrastructure",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Cluster-essential services: networking, storage, certificates, backups, and more."
+  }
+}

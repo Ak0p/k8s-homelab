@@ -1,0 +1,64 @@
+---
+sidebar_position: 5
+---
+
+# CloudNative-PG (CNPG)
+
+CloudNative-PG is a Kubernetes operator for managing PostgreSQL clusters. Each application that requires a database gets its own dedicated CNPG `Cluster`, keeping databases isolated and independently manageable.
+
+## Configuration
+
+**File**: `infrastructure/base/cnpg/`    
+**Chart**: `cloudnative-pg` from `https://cloudnative-pg.github.io/charts`  
+**Namespace**: `cnpg-system`
+
+### Operator HelmRelease
+
+```yaml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cnpg
+  namespace: cnpg-system
+spec:
+  chart:
+    spec:
+      chart: cloudnative-pg
+      version: ">= 0.27.0"
+      sourceRef:
+        kind: HelmRepository
+        name: cnpg
+```
+
+## Database Clusters
+
+Each application that needs PostgreSQL has a `cluster-release.yml` (or similar) in its app directory. For example, Immich:
+
+```yaml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich-cluster
+  namespace: immich
+spec:
+  chart:
+    spec:
+      chart: cluster           # CNPG cluster chart
+      sourceRef:
+        kind: HelmRepository
+        name: cnpg
+  values:
+    cluster:
+      instances: 1
+      storage:
+        size: 8Gi
+        storageClass: host-zfs-standard
+```
+
+### Immich Special Case
+
+Immich uses the [VectorChord](https://github.com/tensorchord/VectorChord) extension for ML-based vector search. The image is `ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3` with `vchord` and `earthdistance` extensions loaded at init time.
+
+## Credentials
+
+CNPG automatically generates credentials for each database cluster and stores them as Kubernetes Secrets in the application's namespace. Applications reference these secrets in their HelmRelease values to configure database connections.

@@ -1,0 +1,47 @@
+---
+sidebar_position: 6
+---
+
+# Homepage
+
+Homepage is a self-hosted dashboard and start page. It aggregates links, widgets, and services into a single customizable interface.
+
+:::info
+WIP
+:::
+## Configuration
+
+**File**: `apps/base/homepage/`    
+**Chart**: `homepage` version `12.1.4` from TrueCharts (`oci.trueforge.org`)  
+**Namespace**: `homepage`
+
+### Key Values
+
+```yaml
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          env:
+            HOMEPAGE_ALLOWED_HOSTS: home.<domain>,localhost
+forceConfigFromValues: true
+persistence:
+  config:
+    enabled: true
+    type: pvc
+    retain: true
+    accessModes: ReadWriteMany
+    size: 10Gi
+    storageClass: host-zfs-files
+```
+
+### Host Configuration
+
+- `HOMEPAGE_ALLOWED_HOSTS` restricts the hostnames Homepage will respond to
+- Configured services and widgets are defined in the config PVC
+
+## External Links
+
+- [Homepage Website](https://gethomepage.dev/)
+- [Homepage Documentation](https://gethomepage.dev/en/configuration/)

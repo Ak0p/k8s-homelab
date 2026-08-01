@@ -1,0 +1,51 @@
+---
+sidebar_position: 6
+---
+
+# Main Cluster
+
+The primary cluster runs the full infrastructure stack and all user-facing applications. It is a single-node cluster with scheduling allowed on the control plane.
+
+## Configuration
+
+**File**: `clusters/main/`
+
+### Node
+
+The cluster runs on a single Talos Linux node:
+
+| Property | Value |
+|---|---|
+| **OS** | Talos Linux |
+| **MetalLB interface** | `enp34s0` |
+| **Control plane IP** | `<node-ip>` |
+
+### Talos Machine Config
+
+The machine configuration is in `talos/main/machine-overlay.yml` and includes:
+
+- **Kernel modules**: `zfs`
+- **CNI**: `flannel`
+- **API Server certSANs**: `<node-ip>`
+- **Scheduling**: `allowSchedulingOnControlPlanes: true`
+- **Extra manifests**: Metrics Server, kubelet-serving-cert-approver
+
+## Flux Kustomizations
+
+| Kustomization | Path | Depends On |
+|---|---|---|
+| `cluster-secrets` | `./secrets/base` | — |
+| `infrastructure` | `./infrastructure/overlays/main` | `cluster-secrets` |
+| `apps` | `./apps/overlays/main` | `infrastructure` |
+
+## Infrastructure
+
+The main cluster overlay includes all infrastructure components:
+
+- OpenEBS, CNPG, Traefik, MetalLB, cert-manager, AdGuard Home, Velero, ExternalDNS, AMD GPU Operator, Pocket ID, Redis
+
+## Applications
+
+All user-facing applications run on this cluster:
+
+- Immich, SFTPGo, Radicale, Home Assistant, Homepage, Actual, Linkwarden, Ollama, Gitea (WIP), Monitoring (Prometheus + Grafana)

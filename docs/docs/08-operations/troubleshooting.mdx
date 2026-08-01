@@ -1,0 +1,125 @@
+---
+sidebar_position: 2
+---
+
+# Troubleshooting
+
+Common issues and debugging tips for the homelab cluster.
+
+## Flux Not Reconciling
+
+**Symptoms:** Resources not updating after a Git push.
+
+**Checks:**
+
+```bash
+# Check Flux Kustomization status
+flux get kustomizations --watch
+
+# Check the GitRepository source
+flux get sources git
+
+# View reconciliation logs
+flux logs --kind=Kustomization --level=error
+```
+
+**Common fixes:**
+- Ensure the Git repository is reachable (check network connectivity)
+- Verify the `sops-age` secret exists in the `flux-system` namespace
+- Check that SOPS-encrypted secrets are properly formatted
+
+## Certificate Issues
+
+**Symptoms:** Application shows certificate warning, Traefik returns TLS errors.
+
+**Checks:**
+
+```bash
+# Check certificate status
+kubectl get certificates -A
+
+# Check cert-manager logs
+kubectl logs -n cert-manager -l app.kubernetes.io/name=cert-manager
+```
+
+**Common fixes:**
+- Verify the Cloudflare API token is valid and has `Zone:DNS:Edit` permissions
+- Check certificate renewal dates: `kubectl describe certificate wildcard-certificate -n traefik`
+- Trigger renewal: `kubectl annotate certificate wildcard-certificate -n traefik cert-manager.io/renew-before=0`
+
+## Backup Failures
+
+**Symptoms:** Velero backup fails, PVC snapshots not created.
+
+**Checks:**
+
+```bash
+# Check backup status
+velero backup get
+velero backup describe <backup-name>
+
+# Check Velero logs
+kubectl logs -n velero -l app.kubernetes.io/name=velero
+```
+
+**Common fixes:**
+- Verify RustFS S3 endpoint is reachable: `curl -k https://s3-rustfs.<domain>`
+- Check the `s3-creds` secret exists and has valid credentials
+- Ensure `VolumeSnapshotClass` exists: `kubectl get volumesnapshotclasses`
+
+## Pod Not Starting
+
+**Symptoms:** Pod stuck in `Pending`, `CrashLoopBackOff`, or `Init:Error`.
+
+**Checks:**
+
+```bash
+# Describe the pod for events
+kubectl describe pod <pod-name> -n <namespace>
+
+# Check pod logs
+kubectl logs <pod-name> -n <namespace>
+```
+
+**Common fixes:**
+- PVC not bound: Check if the StorageClass exists and has available space
+- GPU not available: Verify the AMD GPU operator is running and node has GPU
+- Image pull failure: Check the HelmRepository source is accessible
+
+## DNS Not Resolving
+
+**Symptoms:** Applications can't reach external hosts, DNS lookup failures.
+
+**Checks:**
+
+```bash
+# Check AdGuard Home status
+kubectl get pods -n adguardhome
+
+# Test DNS resolution from within the cluster
+kubectl run -it --rm dns-test --image=busybox -- nslookup google.com
+```
+
+**Common fixes:**
+- Verify AdGuard Home is running and has the LoadBalancer IP (`192.168.1.53`)
+- Check that DNS traffic (UDP 53) can reach the AdGuard pod
+- Verify the Flannel CNI is healthy: `kubectl get pods -n kube-flannel`
+
+## Storage Issues
+
+**Symptoms:** Pods can't mount PVCs, ZFS pool errors.
+
+**Checks:**
+
+```bash
+# Check PVC status
+kubectl get pvc -A
+
+# Check OpenEBS pods
+kubectl get pods -n openebs
+```
+
+**Common fixes:**
+- Verify ZFS pools exist on the node (`zpool list` via a debug pod with host access)
+- Check that the `host-zfs-standard` and `host-zfs-files` StorageClasses exist
+- Ensure the node has sufficient disk space on the ZFS pools

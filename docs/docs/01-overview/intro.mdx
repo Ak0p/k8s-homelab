@@ -1,0 +1,41 @@
+---
+sidebar_position: 1
+---
+# Introduction
+
+The documenation is built using [Docusaurus](https://docusaurus.io) and is hosted on GitHub Pages. It is structured to provide a comprehensive overview of the repository, its structure, and the technologies used.
+
+
+## Motivation
+
+The aim of this project was to deepen my understanding of Kubernetes, Kustomize, GitOps, and Helm, while building a practical self-hosted alternative to cloud services. Along the way I learned a lot about infrastructure cluster maintenance and necessary platform services such as cert-manager, Velero, and Traefik, as well as various self-hosted applications.
+
+## Goals
+
+- **Reproducible** — Make the configuration as reproducible as possible.
+- **Resilient** — Minimise RTO by having daily automated backups.
+- **Maintainable** — Make future modifications easy to implement.
+- **Scalable** — Support multiple clusters without duplicating configuration by hand.
+
+## Architecture Overview
+
+![Architecture diagram showing Git → FluxCD → Cluster flow](/img/architecture-overview.png)
+
+## Key Technologies
+
+| Technology | Role |
+|---|---|
+| [Talos Linux](https://www.talos.dev/) | Immutable, API-driven OS on every node |
+| [Kubernetes](https://kubernetes.io/) | Container orchestration (Flannel CNI) |
+| [FluxCD](https://fluxcd.io/) | GitOps operator — reconciles cluster state |
+| [Helm](https://helm.sh/) | Package manager — all resources via HelmRelease CRDs |
+| [Kustomize](https://kustomize.io/) | Configuration layering via base/overlay pattern |
+| [SOPS](https://github.com/getsops/sops) + [age](https://age-encryption.org/) | Encrypted secrets in Git |
+| [cert-manager](https://cert-manager.io/) | TLS certificate lifecycle automation |
+| [Traefik](https://traefik.io/) | Ingress controller and reverse proxy |
+| [MetalLB](https://metallb.universe.tf/) | LoadBalancer IPs for bare-metal |
+| [OpenEBS](https://openebs.io/) | ZFS-backed CSI storage provider |
+| [Velero](https://velero.io/) | Scheduled cluster backups |
+| [CloudNative-PG](https://cloudnative-pg.io/) | PostgreSQL operator — per-app databases |
+| [AdGuard Home](https://adguard.com/en/adguard-home/overview.html) | Network-wide DNS with ad blocking |
+| [ExternalDNS](https://github.com/kubernetes-sigs/external-dns) | Automatic DNS record creation |

@@ -1,0 +1,39 @@
+---
+sidebar_position: 1
+---
+
+# Prerequisites
+
+Before deploying this cluster, you'll need the following:
+
+## Hardware
+
+- One or more bare-metal machines (or VMs) for the Kubernetes nodes.
+- At least one machine configured as both control-plane and worker (scheduling on control planes is enabled).
+- Static IP addresses for the cluster nodes on your local network.
+
+## Network
+
+- **DNS** — A domain name that you can manage (e.g., `example.com`). DNS records are managed automatically by ExternalDNS + AdGuard Home, but you need at least one DNS A record pointing to the Traefik LoadBalancer IP.
+- **DHCP reservations** — The MetalLB LoadBalancer IPs must not conflict with your DHCP pool.
+- **Port forwarding** (optional) — If you want external access, forward ports 80 and 443 to the Traefik LoadBalancer IP.
+
+## Software
+
+- [`talosctl`](https://www.talos.dev/v1.9/introduction/quickstart/) — For installing and managing Talos Linux nodes.
+- [`flux`](https://fluxcd.io/flux/installation/) — For bootstrapping FluxCD on the cluster.
+- [`kubectl`](https://kubernetes.io/docs/tasks/tools/) — For interacting with the cluster.
+- [`sops`](https://github.com/getsops/sops) + [`age`](https://age-encryption.org/) — For decrypting secrets.
+
+## Cloudflare API Token (for TLS certificates)
+
+The cluster uses [cert-manager](https://cert-manager.io/) with the ACME DNS-01 challenge via Cloudflare to issue Let's Encrypt wildcard certificates. You'll need:
+
+- A Cloudflare account with your domain added.
+- An API token with `Zone:DNS:Edit` permissions for your domain.
+
+This token is stored as a SOPS-encrypted secret in `infrastructure/base/cert-manager/cloudflare-apikey-secret.yml`.
+
+## SOPS Private Key
+
+A private age key is used to decrypt SOPS-encrypted secrets. This key must be deployed to the cluster manually **before** bootstrapping Flux. The corresponding public key is embedded in the `.sops.yaml` files throughout the repository. More info can be found in the [Secrets Management](../03-architecture/secrets-management.mdx) section.

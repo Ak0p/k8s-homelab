@@ -1,41 +1,20 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/python
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
-	"name": "Python 3",
+	"name": "Node.js & TypeScript",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/python:2-3.12-bullseye",
-	"features": {
-		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
-			"version": "latest",
-			"helm": "latest",
-			"minikube": "latest"
-		},
-		"ghcr.io/devcontainers/features/terraform:1": {
-			"installSentinel": true,
-			"installTFsec": true,
-			"installTerraformDocs": true,
-			"version": "latest",
-			"tflint": "latest",
-			"terragrunt": "latest"
-		},
-		"ghcr.io/audacioustux/devcontainers/k9s:1": {},
-		"ghcr.io/hspaans/devcontainer-features/ansible-lint:2": {
-			"version": "latest"
-		},
-		"ghcr.io/devcontainers-extra/features/ansible:2": {
-			"version": "latest",
-			"injections": "hcloud"
-		}
-	}
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:4-24-trixie",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"runArgs": [
+		"--network=host"
+	]
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "pip3 install --user -r requirements.txt",
+	// "postCreateCommand": "yarn install",
 
 	// Configure tool-specific properties.
 	// "customizations": {},

@@ -1,0 +1,27 @@
+---
+sidebar_position: 11
+---
+
+# Redis
+
+Redis is an in-memory data store used as a cache and message broker by various applications.
+
+## Configuration
+
+**File**: `infrastructure/base/redis/`    
+**Chart**: `redis` from `https://charts.bitnami.com/bitnami`  
+**Namespace**: `redis`
+
+### Key Values
+
+```yaml
+global:
+  defaultStorageClass: host-zfs-standard
+master:
+  persistence:
+    storageClass: host-zfs-standard
+replica:
+  count: 1
+  persistence:
+    storageClass: host-zfs-standard
+```

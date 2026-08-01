@@ -1,5 +1,0 @@
-resources:
-  - namespace.yml
-  - release.yml
-  # - routes.yml
-  - agents.yml

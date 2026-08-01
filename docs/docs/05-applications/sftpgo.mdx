@@ -1,0 +1,55 @@
+---
+sidebar_position: 2
+---
+
+# SFTPGo
+
+SFTPGo is a full-featured file server supporting SFTP, FTP, and WebDAV protocols.
+
+## Configuration
+
+**File**: `apps/base/sftpgo/`    
+**Chart**: `sftpgo` version `9.18.0`  
+**Namespace**: `sftpgo`
+
+### Key Values
+
+```yaml
+service:
+  sftpport:
+    enabled: true
+    type: LoadBalancer
+    annotations:
+      metallb.io/address-pool: default
+      external-dns.alpha.kubernetes.io/hostname: sftp.sftpgo.<domain>
+  ftpport:
+    enabled: false
+persistence:
+  data:
+    enabled: true
+    type: pvc
+    retain: true
+    accessModes: ReadWriteMany
+    size: 500Gi
+    storageClass: host-zfs-files
+  backupdirectory:
+    enabled: true
+    type: pvc
+    accessModes: ReadWriteMany
+    size: 500Gi
+    storageClass: host-zfs-files
+  configpath:
+    enabled: true
+    type: pvc
+    size: 500Mi
+    storageClass: host-zfs-files
+  shareaccess:
+    enabled: true
+    type: pvc
+    accessModes: ReadWriteMany
+    size: 100Gi
+```
+
+## External Links
+
+- [SFTPGo Documentation](https://github.com/drakkan/sftpgo)

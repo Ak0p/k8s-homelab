@@ -1,0 +1,64 @@
+---
+sidebar_position: 3
+---
+
+# MetalLB
+
+MetalLB provides `LoadBalancer`-type Services on bare-metal clusters where a cloud provider is not available. It uses L2 (ARP) advertisement to assign static IPs from a configured pool.
+
+## Configuration
+
+**File**: `infrastructure/base/metallb/`    
+**Chart**: `metallb` from `https://metallb.github.io/metallb`  
+**Namespace**: `metallb-system`
+
+## IPAddressPool
+
+Defined in `infrastructure/base/metallb/ipaddresspool.yml`:
+
+```yaml
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.168.1.64/28
+    - 192.168.1.53/32
+```
+
+- `192.168.1.64/28` — General-purpose pool for LoadBalancer services (14 usable IPs)
+- `192.168.1.53/32` — Dedicated IP for AdGuard Home DNS traffic
+
+## L2Advertisement
+
+Defined in `infrastructure/base/metallb/l2advertisement.yml`:
+
+```yaml
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - default
+  nodeSelectors:
+    - matchLabels:
+        kubernetes.io/hostname: talos-5at-i15
+  interfaces:
+    - enp34s0
+```
+
+- Advertised from node `talos-5at-i15` via interface `enp34s0`
+- All IPs in the pool are advertised from this single node
+
+## Services Using MetalLB
+
+| Service | Assigned IP | Purpose |
+|---|---|---|
+| Traefik | Pool address | HTTP/HTTPS ingress |
+| AdGuard Home (DNS-TCP) | `192.168.1.53` | DNS resolution |
+| AdGuard Home (DNS-UDP) | `192.168.1.53` | DNS resolution |
+| SFTPGo | Pool address | SFTP file transfer |

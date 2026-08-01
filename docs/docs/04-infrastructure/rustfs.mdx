@@ -1,0 +1,38 @@
+---
+sidebar_position: 12
+---
+
+# RustFS
+
+RustFS is an S3-compatible object storage server deployed on the backup cluster. It serves as the Velero backup target, providing a low-resource alternative to MinIO.
+
+## Configuration
+
+**File**: `infrastructure/base/rustfs/`    
+**Chart**: `rustfs` version `0.0.90`  
+**Namespace**: `rustfs`
+
+### Key Values
+
+```yaml
+mode:
+  standalone:
+    enabled: true
+  distributed:
+    enabled: false
+storageclass:
+  name: host-zfs-files
+  dataStorageSize: 2Ti
+  logStorageSize: 2Gi
+ingress:
+  enabled: false
+```
+
+## Routes
+
+The S3 endpoint uses a dedicated TLS certificate (`rustfs-storage-certificate-secret`) and points to the backup cluster's Traefik LoadBalancer IP (`192.168.1.102`).
+
+
+## Backup Target
+
+Velero is configured to use RustFS as its `BackupStorageLocation` with the URL `https://s3-rustfs.<domain>`, using S3-compatible credentials stored in a SOPS-encrypted secret.

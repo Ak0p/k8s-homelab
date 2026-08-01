@@ -1,0 +1,29 @@
+---
+sidebar_position: 9
+---
+
+# Pocket ID
+
+Pocket ID is an authentication service that provides a central identity provider for applications on the cluster.
+
+## Configuration
+
+**File**: `infrastructure/base/pocket-id/`    
+**Chart**: `pocket-id` version `2.4.0` from `https://github.com/pocket-id/pocket-id`  
+**Namespace**: `pocket-id`
+
+### Key Values
+
+```yaml
+image:
+  tag: v2.4.0
+persistence:
+  storageClass: host-zfs-standard
+config:
+  appUrl: https://auth.<domain>
+  encryptionKey: <SOPS-encrypted>
+```
+
+## Secrets
+
+The encryption key and other sensitive configuration values are SOPS-encrypted in the `release.yml` file.

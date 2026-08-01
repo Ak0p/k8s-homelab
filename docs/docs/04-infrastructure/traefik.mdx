@@ -1,0 +1,75 @@
+---
+sidebar_position: 1
+---
+
+# Traefik
+
+Traefik is the ingress controller and reverse proxy. All external HTTP/HTTPS traffic enters through a single Traefik `LoadBalancer` Service.
+
+## Configuration
+
+**File**: `infrastructure/base/traefik/release.yml`    
+**Chart**: `traefik` from `https://traefik.github.io/charts`  
+**Namespace**: `traefik`
+
+### Key Values
+
+```yaml
+providers:
+  kubernetesCRD:
+    allowCrossNamespace: true  # Routes can reference services in any namespace
+  kubernetesGateway:
+    enabled: true              # Gateway API support
+service:
+  single: true                 # Single LoadBalancer for all traffic
+ingressRoute:
+  dashboard:
+    enabled: true
+    matchRule: Host(`traefik.<domain>`)
+```
+
+## EntryPoints
+
+- **websecure** (443) — Default HTTPS entrypoint for all applications
+- Custom TCP entrypoints are created for non-HTTP protocols (SFTP)
+
+## TLS
+
+Traefik terminates TLS using certificates stored in the `traefik` namespace:
+
+- `wildcard-certificate-secret` — `*.<domain>` — Used by most applications
+- `storage-certificate-secret` — `*.sftpgo.<domain>` — Used by SFTPGo
+- `rustfs-storage-certificate-secret` — `*.rustfs.<domain>` — Used by RustFS
+
+These certificates are provisioned by cert-manager.
+
+## IngressRoutes
+
+Each application defines a `Traefik IngressRoute` CRD in the `traefik` namespace (or its own namespace). A typical route looks like:
+
+```yaml
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: <app>-route
+  namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/target: traefik.<domain>
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`<app>.<domain>`)
+      services:
+        - kind: Service
+          name: <app-service>
+          namespace: <app-namespace>
+          port: <port>
+  tls:
+    secretName: wildcard-certificate-secret
+```
+
+## Dashboard
+
+The Traefik dashboard is accessible at `traefik.<domain>` over HTTP (port 80). It provides real-time view of routes, services, and health status.

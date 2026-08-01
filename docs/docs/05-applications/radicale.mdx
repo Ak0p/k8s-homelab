@@ -1,0 +1,48 @@
+---
+sidebar_position: 3
+---
+
+# Radicale
+
+Radicale is a CalDAV/CardDAV server for calendars and contacts.
+
+## Configuration
+
+**File**: `apps/base/radicale/`    
+**Chart**: `radicale` version `8.17.2` from TrueCharts (`oci.trueforge.org`)  
+**Namespace**: `radicale`
+
+### Key Values
+
+Some values are SOPS-encrypted (indicated below).
+
+```yaml
+radicale:
+  auth:
+    htpasswd_encryption: bcrypt
+    users:
+      - username: andrei
+        password: <encrypted>
+persistence:
+  data:
+    enabled: true
+    type: pvc
+    retain: true
+securityContext:
+  pod:
+    fsGroupChangePolicy: Always
+```
+
+
+### Authentication
+
+- HTPasswd-based authentication with bcrypt encryption
+
+### Values note
+
+The TrueCharts version of the Radicale chart has the config map for the users as a part of the values file, and thus the values key has to be SOPS-encrypted.
+
+## External Links
+
+- [Radicale Website](https://radicale.org/)
+- [Radicale Documentation](https://radicale.org/documentation/)

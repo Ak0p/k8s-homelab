@@ -1,0 +1,33 @@
+---
+sidebar_position: 8
+---
+
+# Linkwarden
+
+Linkwarden is a self-hosted bookmark manager.
+
+## Configuration
+
+**File**: `apps/base/linkwarden/`    
+**Chart**: `linkwarden` version `8.5.0` from TrueCharts (`oci.trueforge.org`)  
+**Namespace**: `linkwarden`
+
+### Key Values
+
+```yaml
+config:
+  nextauth_url: "http://localhost:3000/api/auth"
+persistence:
+  data:
+    enabled: true
+    type: pvc
+    retain: true
+    accessModes: ReadWriteMany
+    size: 20Gi
+    storageClass: host-zfs-files
+```
+
+## External Links
+
+- [Linkwarden Website](https://linkwarden.app/)
+- [Linkwarden GitHub](https://github.com/linkwarden/linkwarden)

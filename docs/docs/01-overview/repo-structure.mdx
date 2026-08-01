@@ -1,0 +1,72 @@
+---
+sidebar_position: 2
+---
+
+# Repository Structure
+
+The repository follows a **base/overlay pattern** alongside a separation of **apps** and **infrastructure**. This keeps core definitions independent from environment-specific configuration.
+
+## Directory Layout
+
+```
+.
+├── clusters/          # Bootstrap config and Flux Kustomizations (main + backup)
+├── apps/              # User-facing applications
+│   ├── base/          # Canonical app definitions (HelmRelease, routes, etc.)
+│   └── overlays/      # Per-cluster composition
+├── infrastructure/    # Cluster-essential services
+│   ├── base/          # Canonical infra definitions
+│   └── overlays/      # Per-cluster composition and patches
+├── secrets/           # SOPS-encrypted Kubernetes Secrets
+├── talos/             # Talos machine configuration
+└── docs/              # This documentation site
+```
+
+## Base / Overlay Pattern
+
+Each application and infrastructure component has a **base** definition containing the canonical manifests. Per-cluster **overlays** reference the base and apply environment-specific patches or values.
+
+### App structure (example: Immich)
+
+```
+apps/base/immich/
+├── kustomization.yml      # Kustomize resource aggregation
+├── namespace.yml          # Namespace definition
+├── release.yml            # HelmRelease with app values
+├── cluster-release.yml    # CNPG Cluster definition (PostgreSQL)
+├── pvc.yml                # PersistentVolumeClaim for media
+├── repository.yml          # HelmRepository source
+└── routes.yml             # Traefik IngressRoute
+```
+
+### Infrastructure structure (example: OpenEBS)
+
+```
+infrastructure/base/openebs/
+├── kustomization.yml      # Kustomize resource aggregation
+├── namespace.yml          # Namespace definition
+├── release.yml            # HelmRelease with chart values
+├── repository.yml          # HelmRepository source
+└── zfs-storageclass.yml   # StorageClass definitions
+```
+
+## Flux Reconciliation Order
+
+Flux applies resources in dependency order:
+
+```
+cluster-secrets → infrastructure → apps
+```
+
+1. **cluster-secrets** — Decrypts and applies SOPS-encrypted secrets (domain credentials, API keys)
+2. **infrastructure** — Deploys cluster-essential services (Traefik, MetalLB, OpenEBS, CNPG, Velero, etc.)
+3. **apps** — Deploys user-facing applications (Immich, Homepage, SFTPGo, etc.)
+
+## Multi-Cluster Design
+
+The `apps/overlays/` and `infrastructure/overlays/` directories support multiple clusters without duplicating configuration. Currently:
+
+- **`main`** — The primary cluster running all infrastructure and applications.
+- **`backup`** — A minimal cluster running only RustFS for S3-compatible object storage (Velero backup target).
+
+Each overlay references the same base definitions and only overrides cluster-specific values.

@@ -1,0 +1,151 @@
+---
+sidebar_position: 3
+---
+
+# Adding a New Application
+
+Follow this workflow to add a new application to the cluster.
+
+## Step 1: Choose a Chart
+
+Find a Helm chart for the application. Common sources:
+
+- [TrueCharts](https://truecharts.org/) — Large community chart library at `oci.trueforge.org`
+- Official Helm repositories (e.g., Bitnami, prometheus-community)
+- Application-specific OCI charts (e.g., Immich at `oci://ghcr.io/immich-app/immich-charts`)
+
+## Step 2: Create the Application Directory
+
+Create a new directory under `apps/base/<app-name>/` with the following files:
+
+```
+apps/base/<app-name>/
+├── kustomization.yml      # Kustomize resource list
+├── namespace.yml          # Namespace manifest
+├── release.yml            # HelmRelease with Chart values
+├── repository.yml         # HelmRepository source (if not using TrueCharts)
+└── routes.yml             # Traefik IngressRoute
+```
+
+### Reference: `apps/base/homepage/kustomization.yml`
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yml
+  - release.yml
+  - routes.yml
+```
+
+### Reference: `apps/base/homepage/namespace.yml`
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: <app-name>
+```
+
+### Reference: HelmRelease
+
+```yaml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: <app-name>
+  namespace: <app-namespace>
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: <chart-name>
+      version: <chart-version>
+      sourceRef:
+        kind: HelmRepository
+        name: <repo-name>
+        namespace: flux-system   # or the repo's namespace
+  values:
+    # Application-specific configuration
+```
+
+### Reference: IngressRoute
+
+```yaml
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: <app-name>-route
+  namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/target: traefik.<domain>
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`<app-name>.<domain>`)
+      services:
+        - kind: Service
+          name: <service-name>
+          namespace: <app-namespace>
+          port: <port>
+  tls:
+    secretName: wildcard-certificate-secret
+```
+
+## Step 3: Add to the Overlay
+
+Add the new app to `apps/overlays/main/kustomization.yml`:
+
+```yaml
+resources:
+  - ../../base/<existing-apps>
+  - ../../base/<new-app-name>
+```
+
+## Step 4: (Optional) Add a CNPG Database
+
+If the application requires PostgreSQL, create a `cluster-release.yml` referencing the CNPG cluster chart:
+
+```yaml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: <app-name>-cluster
+  namespace: <app-namespace>
+spec:
+  chart:
+    spec:
+      chart: cluster
+      sourceRef:
+        kind: HelmRepository
+        name: cnpg
+  values:
+    cluster:
+      instances: 1
+      storage:
+        size: <size>Gi
+        storageClass: host-zfs-standard
+```
+
+## Step 5: Commit and Push
+
+Push the changes to Git. Flux will automatically reconcile and deploy the new application.
+
+## Step 6: Verify
+
+```bash
+# Check HelmRelease status
+flux get helmreleases -n <app-namespace>
+
+# Check that the pods are running
+kubectl get pods -n <app-namespace>
+
+# Check the IngressRoute
+kubectl get ingressroute -n traefik <app-name>-route
+
+# Verify DNS resolution
+nslookup <app-name>.<domain>
+```

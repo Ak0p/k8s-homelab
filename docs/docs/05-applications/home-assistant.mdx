@@ -1,0 +1,45 @@
+---
+sidebar_position: 4
+---
+
+# Home Assistant
+
+Home Assistant is a home automation platform.
+
+:::info
+
+The current setup doesn't work with LAN network discovery integrations.  
+In a future revision I plan on deploying HA either as a kube-virt VM or on a dedicated machine via HAOS.
+
+:::
+
+## Configuration
+
+**File**: `apps/base/home-assistant/`    
+**Chart**: `home-assistant` version `30.0.4` from TrueCharts (`oci.trueforge.org`)  
+**Namespace**: `home-assistant`
+
+### Key Values
+
+```yaml
+persistence:
+  config:
+    enabled: true
+    type: pvc
+    retain: true
+    accessModes: ReadWriteMany
+    size: 10Gi
+    storageClass: host-zfs-files
+homeassistant:
+  trusted_proxies:
+    - 10.244.0.0/16      # Flannel pod network CIDR
+```
+
+### Networking
+
+- `trusted_proxies` is set to the Flannel pod network CIDR (`10.244.0.0/16`) — this ensures that requests proxied through Traefik are correctly identified as coming from a trusted reverse proxy
+
+## External Links
+
+- [Home Assistant Website](https://www.home-assistant.io/)
+- [Home Assistant Documentation](https://www.home-assistant.io/docs/)

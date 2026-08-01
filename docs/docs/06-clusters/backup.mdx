@@ -1,0 +1,41 @@
+---
+sidebar_position: 1
+---
+
+# Backup Cluster
+
+A minimal second cluster that runs only RustFS to provide S3-compatible object storage for Velero backups.
+
+## Purpose
+
+The backup cluster exists to:
+
+- Provide an off-cluster backup target for Velero backups from the main cluster
+- Run a lightweight S3-compatible storage server (RustFS) with minimal resource usage
+- Ensure backups survive a complete failure of the main cluster
+
+## Configuration
+
+**File**: `clusters/backup/`
+
+The backup cluster uses a patched overlay of the infrastructure base:
+
+```yaml
+# clusters/backup/infrastructure.yml → infrastructure/overlays/backup/
+```
+
+The backup overlay references a subset of infrastructure components (primarily RustFS and its dependencies) with cluster-specific patches for different LoadBalancer IPs and node configuration.
+
+## Traefik / Networking
+
+The backup cluster runs its own Traefik instance with a different LoadBalancer IP:
+
+| Service | IP | URL |
+|---|---|---|
+| Traefik | `192.168.1.102` | `traefik-backup.<domain>` |
+| RustFS S3 | (via Traefik) | `s3-rustfs.<domain>` |
+
+
+## Flux Bootstrap
+
+Flux is bootstrapped on the backup cluster similar to the main cluster, but references `clusters/backup/` as the root path. The reconciliation chain ensures RustFS is running before any dependent resources.

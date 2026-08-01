@@ -1,0 +1,66 @@
+---
+sidebar_position: 6
+---
+
+# Velero
+
+Velero handles scheduled cluster backups. It is configured to run daily with a 30-day retention period, backing up all namespace resources and CSI volume snapshots to an S3-compatible endpoint.
+
+## Configuration
+
+**File**: `infrastructure/base/velero/`    
+**Chart**: `velero` version `12.0.0` from `https://vmware-tanzu.github.io/helm-charts`  
+**Namespace**: `velero`
+
+### Key Values
+
+```yaml
+deployNodeAgent: true
+nodeAgent:
+  disableHostPath: true
+configuration:
+  features: EnableCSI
+  defaultVolumesToFsBackup: false
+  backupStorageLocation:
+    - name: minio
+      provider: aws
+      bucket: velero-backup
+      default: true
+      config:
+        region: minio
+        s3ForcePathStyle: "true"
+        s3Url: https://s3-rustfs.<domain>
+        insecureSkipTLSVerify: "true"
+```
+
+## Backup Schedule
+
+Defined in `infrastructure/base/velero/schedule.yml`:
+
+```yaml
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: daily-backup
+  namespace: velero
+spec:
+  schedule: "0 0 * * *"       # Daily at midnight
+  template:
+    includedNamespaces:
+      - "*"                    # All namespaces
+    snapshotVolumes: true       # CSI volume snapshots
+    snapshotMoveData: true      # Move snapshot data to backup storage
+    ttl: 720h0m0s              # 30 days retention
+```
+
+## VolumeSnapshotClass
+
+Velero uses the `zfs-snapshot-class` VolumeSnapshotClass (defined in the OpenEBS configuration) to create ZFS-native snapshots. The VolumeSnapshotClass is labeled with `velero.io/csi-volumesnapshot-class: "true"` for automatic discovery.
+
+## Backup Storage
+
+Backups are stored on RustFS, an S3-compatible object storage server running on the backup cluster. The S3 credentials are stored as a SOPS-encrypted secret in `infrastructure/base/velero/s3-creds-secret.yml`.
+
+## Restore
+
+See the [Recovery](../02-getting-started/recovery.mdx) page for restore procedures.

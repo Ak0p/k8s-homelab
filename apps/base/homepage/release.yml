@@ -21,7 +21,7 @@ spec:
           containers:
             main:
               env:
-                HOMEPAGE_ALLOWED_HOSTS: home.akop.ro,localhost
+                HOMEPAGE_ALLOWED_HOSTS: home.${domain},localhost
     forceConfigFromValues: true
     persistence:
       config:

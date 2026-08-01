@@ -1,0 +1,35 @@
+---
+sidebar_position: 7
+---
+
+# Actual
+
+Actual is a self-hosted personal finance and budgeting tool.
+
+## Configuration
+
+**File**: `apps/base/actual/`    
+**Chart**: `actualserver` version `16.5.0` from TrueCharts (`oci.trueforge.org`)  
+**Namespace**: `actual`  
+**Version**: `26.6.0`
+
+### Key Values
+
+```yaml
+image:
+  pullPolicy: Always
+  tag: 26.6.0
+persistence:
+  data:
+    enabled: true
+    type: pvc
+    retain: true
+    accessModes: ReadWriteMany
+    size: 10Gi
+    storageClass: host-zfs-files
+```
+
+## External Links
+
+- [Actual Budget Website](https://actualbudget.org/)
+- [Actual Budget Documentation](https://actualbudget.org/docs/)

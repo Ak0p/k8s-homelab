@@ -1,0 +1,6 @@
+resources:
+  - namespace.yml
+  - release.yml
+  - repository.yml
+  - grafana-admin-credentials-secret.yml
+  - routes.yml

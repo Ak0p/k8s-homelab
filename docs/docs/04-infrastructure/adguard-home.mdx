@@ -1,0 +1,49 @@
+---
+sidebar_position: 7
+---
+
+# AdGuard Home
+
+AdGuard Home is a network-wide DNS server with ad and tracker blocking. It runs in the cluster with a dedicated LoadBalancer IP for DNS traffic.
+
+## Configuration
+
+**File**: `infrastructure/base/adguardhome/`    
+**Chart**: `adguard-home` version `13.0.0` from TrueCharts (`oci.trueforge.org`)  
+**Namespace**: `adguardhome`
+
+### Key Values
+
+```yaml
+persistence:
+  data:
+    type: pvc
+    accessModes: ReadWriteMany
+    size: 4Gi
+    storageClass: host-zfs-standard
+  config:
+    type: pvc
+    accessModes: ReadWriteMany
+    size: 100Mi
+    storageClass: host-zfs-standard
+service:
+  dns-tcp:
+    type: LoadBalancer
+    annotations:
+      metallb.io/loadBalancerIPs: 192.168.1.53
+      metallb.io/allow-shared-ip: "adguard"
+  dns-udp:
+    type: LoadBalancer
+    annotations:
+      metallb.io/loadBalancerIPs: 192.168.1.53
+      metallb.io/allow-shared-ip: "adguard"
+```
+
+## Networking
+
+- **DNS TCP/UDP**: `192.168.1.53:53` — Primary DNS resolver
+- **Web UI**: Available at `adguardhome.<domain>` via Traefik IngressRoute
+
+## Configuration
+
+The AdGuard Home configuration is stored in a ConfigMap in `infrastructure/base/adguardhome/configmap.yml`.

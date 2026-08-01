@@ -1,0 +1,60 @@
+---
+sidebar_position: 10
+---
+
+# Monitoring
+
+The monitoring stack consists of Prometheus and Grafana, deployed via the `kube-prometheus-stack` Helm chart.
+
+## Configuration
+
+**File**: `apps/base/monitoring/`    
+**Chart**: `kube-prometheus-stack` version `87.19.1` from `oci://ghcr.io/prometheus-community/charts/`  
+**Namespace**: `monitoring`
+
+### Key Values
+
+```yaml
+alertmanager:
+  enabled: false
+grafana:
+  enabled: true
+  admin:
+    existingSecret: grafana-admin-credentials   # SOPS-encrypted
+prometheus:
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: host-zfs-standard
+          accessModes: ["ReadWriteMany"]
+          resources:
+            requests:
+              storage: 50Gi
+    initContainers:
+      # Fix permissions for Prometheus data directory
+      - name: fix-permissions
+        image: busybox
+        command: ["sh", "-c", "chown -R 1000:2000 /prometheus"]
+```
+
+### Grafana
+
+- **Admin credentials**: Stored in SOPS-encrypted secret `grafana-admin-credentials`
+- **Access**: `grafana.<domain>` via Traefik IngressRoute
+
+### Prometheus
+
+- **Storage**: 50Gi on `host-zfs-standard`
+- **Init container**: Fixes permissions on the Prometheus data directory
+- Scrapes metrics from cluster components, including the AMD GPU operator
+
+### Alertmanager
+
+- Alertmanager is currently **disabled**.
+
+## External Links
+
+- [Prometheus Documentation](https://prometheus.io/docs/)
+- [Grafana Documentation](https://grafana.com/docs/)
+- [kube-prometheus-stack chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack)

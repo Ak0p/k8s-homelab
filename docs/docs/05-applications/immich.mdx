@@ -1,0 +1,51 @@
+---
+sidebar_position: 5
+---
+
+# Immich
+
+Immich is a self-hosted photo and video library — a Google Photos alternative.
+
+## Configuration
+
+**File**: `apps/base/immich/`    
+**Chart**: `immich` from `oci://ghcr.io/immich-app/immich-charts`  
+**Namespace**: `immich`  
+**Version**: `v2.5.2`
+
+### Key Values
+
+```yaml
+immich:
+  persistence:
+    library:
+      existingClaim: immich    # 1Ti PVC on host-zfs-files
+controllers:
+  main:
+    containers:
+      main:
+        env:
+          DB_HOSTNAME: <from immich-cluster-app secret>
+          DB_PORT: 5432
+          DB_USERNAME: <from immich-cluster-superuser secret>
+          DB_PASSWORD: <from immich-cluster-superuser secret>
+          DB_DATABASE_NAME: <from immich-cluster-app secret>
+valkey:
+  enabled: true                 # Built-in Valkey (Redis-compatible)
+```
+
+### Database (CNPG Cluster)
+
+Immich uses a dedicated CNPG PostgreSQL cluster with the VectorChord extension for ML-based vector search:
+
+- **Image**: `ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3`
+- **Storage**: 8Gi on `host-zfs-standard`
+- **Extensions**: `vchord` (vector similarity search), `earthdistance` (geospatial queries)
+- **Role**: `immich` with superuser privileges
+- **Init SQL**: `CREATE EXTENSION vchord CASCADE; CREATE EXTENSION earthdistance CASCADE;`
+
+
+## External Links
+
+- [Immich Documentation](https://immich.app/docs/overview/introduction)
+- [Immich GitHub](https://github.com/immich-app/immich)

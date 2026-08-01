@@ -1,0 +1,62 @@
+---
+sidebar_position: 8
+---
+
+# Backup & Restore
+
+## Backup Schedule
+
+Velero is configured to run daily backups with a 30-day retention period. The backup schedule is defined in `infrastructure/base/velero/schedule.yml`:
+
+```yaml
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: daily-backup
+  namespace: velero
+spec:
+  schedule: "0 0 * * *"    # Daily at midnight
+  template:
+    includedNamespaces:
+      - "*"                  # All namespaces
+    snapshotVolumes: true     # CSI volume snapshots via OpenEBS
+    snapshotMoveData: true
+    ttl: 720h0m0s            # 30 days retention
+```
+
+## What Gets Backed Up
+
+- All Kubernetes resources (namespaces, deployments, services, etc.)
+- Persistent volume data (via CSI VolumeSnapshots using OpenEBS ZFS snapshots)
+- Snapshot data is moved to S3 storage (RustFS on the backup cluster)
+
+## Backup Storage
+
+Backups are stored on RustFS (`https://s3-rustfs.<domain>`), an S3-compatible server running on the backup cluster. The `s3-creds` secret in the `velero` namespace contains the S3 credentials.
+
+## Restore Procedure
+
+See the [Recovery](../02-getting-started/recovery.mdx) page for detailed restore instructions.
+
+## Manual Backup
+
+To trigger an immediate backup:
+
+```bash
+velero backup create --from-schedule daily-backup
+```
+
+## Monitoring Backups
+
+Check backup status:
+
+```bash
+velero backup get
+velero backup describe <backup-name>
+```
+
+## Troubleshooting
+
+- If a backup fails, check the Velero pod logs: `kubectl logs -n velero -l app.kubernetes.io/name=velero`
+- Verify the S3 endpoint is reachable from the main cluster
+- Check that the VolumeSnapshotClass exists: `kubectl get volumesnapshotclasses`

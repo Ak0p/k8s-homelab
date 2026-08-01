@@ -1,0 +1,72 @@
+---
+sidebar_position: 2
+---
+
+# Network Architecture
+
+The networking stack is designed so that all external traffic enters through a single entry point, DNS is managed automatically, and TLS certificates are issued without manual intervention.
+
+## Traffic Flow
+
+![Architecture diagram showing the network flow](/img/network-flow.png)
+
+## MetalLB
+
+[MetalLB](https://metallb.universe.tf/) provides `LoadBalancer`-type Services on bare-metal where no cloud provider exists. It uses L2 (ARP) advertisement to announce service IPs on the local network.
+
+**Configuration** (`infrastructure/base/metallb/`):
+
+- **IPAddressPool** — `192.168.1.64/28` (range of 14 IPs) plus `192.168.1.53/32` (dedicated for AdGuard DNS)
+- **L2Advertisement** — Advertised on node `talos-5at-i15` via interface `enp34s0`
+
+Traefik gets the first available IP from the pool. AdGuard Home gets a fixed IP (`192.168.1.53`) for DNS traffic.
+
+## Traefik
+
+[Traefik](https://traefik.io/) is the ingress controller and reverse proxy. All external HTTP/HTTPS traffic enters through a single Traefik `LoadBalancer` Service (IP assigned by MetalLB).
+
+**Key configuration** (`infrastructure/base/traefik/release.yml`):
+
+- `providers.kubernetesCRD.allowCrossNamespace: true` — Enables IngressRoutes in any namespace to be served
+- `providers.kubernetesGateway.enabled: true` — Gateway API support
+- `service.single: true` — Single service mode (one LoadBalancer for all traffic)
+- Dashboard enabled at `traefik.<domain>`
+
+Each application defines a `Traefik IngressRoute` CRD that routes traffic by hostname. The IngressRoute references the TLS certificate and the backend service in the application's namespace.
+
+### Custom Entrypoints
+
+A separate SFTP LoadBalancer service is created for non-HTTP protocols (SFTP on port 22). This bypasses Traefik's HTTP ingress and uses a direct MetalLB IP.
+
+## DNS
+
+### AdGuard Home
+
+[AdGuard Home](https://adguard.com/en/adguard-home/overview.html) acts as the network-wide DNS resolver with ad and tracker blocking. It runs in the cluster with a dedicated LoadBalancer IP (`192.168.1.53`) for DNS traffic on both TCP and UDP port 53.
+
+### ExternalDNS
+
+[ExternalDNS](https://github.com/kubernetes-sigs/external-dns) automatically creates DNS records in AdGuard Home based on `IngressRoute` annotations. When a new application is deployed with:
+
+```yaml
+annotations:
+  external-dns.alpha.kubernetes.io/target: traefik.<domain>
+```
+
+ExternalDNS reads the annotation and creates an A record in AdGuard Home pointing to the Traefik LoadBalancer IP. This eliminates manual DNS management.
+
+**Provider**: ExternalDNS uses the [AdGuard Home webhook provider](https://github.com/muhlba91/external-dns-provider-adguard) to communicate with the AdGuard Home API.
+
+## TLS
+
+### cert-manager
+
+[cert-manager](https://cert-manager.io/) automates TLS certificate provisioning and renewal. Configured with a `ClusterIssuer` that uses the ACME DNS-01 challenge via the Cloudflare API.
+
+**Certificate hierarchy**:
+
+- `wildcard-certificate` — `*.<domain>` — Used by most applications
+- `storage-certificate` — `*.sftpgo.<domain>` — Used by SFTPGo subdomains
+- `rustfs-storage-certificate` — `*.rustfs.<domain>` — Used by RustFS S3 endpoint
+
+Certificates are stored as Kubernetes Secrets in the `traefik` namespace and consumed by Traefik IngressRoutes.

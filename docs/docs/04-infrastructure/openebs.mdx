@@ -1,0 +1,61 @@
+---
+sidebar_position: 4
+---
+
+# OpenEBS
+
+OpenEBS provides CSI-compatible storage using the ZFS local PV engine. Persistent volumes are backed by ZFS datasets on the node's local disks.
+
+## Configuration
+
+**File**: `infrastructure/base/openebs/`    
+**Chart**: `openebs` version `4.3.3` from `https://openebs.github.io/charts`  
+**Namespace**: `openebs`
+
+### Key Values
+
+```yaml
+zfs-localpv:
+  zfsNode:
+    encrKeysDir: /var/openebs/keys
+engines:
+  replicated:
+    mayastor:
+      enabled: false  # Mayastor engine disabled
+loki:
+  enabled: false
+localpvScConfig:
+  enabled: false
+```
+
+## StorageClasses
+
+Two StorageClasses are defined in `infrastructure/base/openebs/zfs-storageclass.yml`:
+
+| Name | Record Size | Pool | Use Case | Default |
+|---|---|---|---|---|
+| `host-zfs-standard` | 128K | `fast` | Databases, small files | No |
+| `host-zfs-files` | 1M | `slow` | Media, documents | **Yes** |
+
+Both classes support `ReadWriteMany` access mode, `lz4` compression, and `allowVolumeExpansion: true`.
+
+## VolumeSnapshotClass
+
+Defined in `infrastructure/base/openebs/zfs-storageclass.yml` (the VolumeSnapshotClass is in a separate file `volume-snapshot-class.yml`):
+
+```yaml
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshotClass
+metadata:
+  name: zfs-snapshot-class
+  labels:
+    velero.io/csi-volumesnapshot-class: "true"
+driver: zfs.csi.openebs.io
+deletionPolicy: Retain
+```
+
+This enables Velero to take CSI-compatible ZFS snapshots for backup.
+
+## Velero Integration
+
+OpenEBS has built-in Velero support via the CSI plugin. Velero uses the `VolumeSnapshotClass` to create ZFS-native snapshots during backup, and the `VolumeSnapshotLocation` in Velero's configuration references this class for restore operations.

@@ -1,0 +1,64 @@
+---
+sidebar_position: 1
+---
+
+# GitOps Flow
+
+The cluster is managed entirely through GitOps — every commit pushed to the repository is automatically reconciled by FluxCD.
+
+## Flux Reconciliation Chain
+
+Flux applies resources in a strict dependency order defined in `clusters/main/`:
+
+```
+cluster-secrets → infrastructure → apps
+```
+
+### 1. cluster-secrets
+
+Defined in `clusters/main/secrets.yml` — path: `./secrets/base`
+
+This is the first Kustomization to run. It decrypts and applies SOPS-encrypted secrets, including the `domain-creds` Secret that contains email addresses and Cloudflare API credentials. All downstream Kustomizations depend on this being available.
+
+### 2. infrastructure
+
+Defined in `clusters/main/infrastructure.yml` — path: `./infrastructure/overlays/main`
+
+After secrets are in place, infrastructure components are deployed. This includes Traefik, MetalLB, OpenEBS, cert-manager, CNPG, Velero, AdGuard Home, ExternalDNS, and others. Infrastructure depends on `cluster-secrets` because components like cert-manager and ExternalDNS need the domain credentials.
+
+### 3. apps
+
+Defined in `clusters/main/apps.yml` — path: `./apps/overlays/main`
+
+Once infrastructure is ready, user-facing applications are deployed. Apps depend on `infrastructure` because they rely on Traefik IngressRoutes, CNPG databases, and OpenEBS storage classes.
+
+## Kustomize Overlay Pattern
+
+Each Flux Kustomization points to an **overlay** directory, not the base directory directly:
+
+```
+clusters/main/apps.yml → apps/overlays/main/ → apps/base/<app>/
+clusters/main/infrastructure.yml → infrastructure/overlays/main/ → infrastructure/base/<component>/
+```
+
+The overlay aggregates the base resources. This allows for future multi-cluster setups where different overlays (e.g., `main`, `staging`) can reference the same base definitions with different patches.
+
+## SOPS Decryption
+
+Flux has the `decryption` provider configured to use SOPS with the `sops-age` key. Any encrypted fields in the manifests are automatically decrypted during reconciliation. The SOPS private key must be deployed to the cluster manually before bootstrapping.
+
+## Post-Build Substitutions
+
+Flux performs variable substitution after applying manifests using secrets. The `postBuild.substituteFrom` field references the `domain-creds` Secret, allowing `${domain}` and similar variables to be resolved across all manifests.
+
+## Reconciliation Flow
+
+
+![Architecture diagram showing the reconciliation flow](/img/reconciliation-flow.png)
+
+Flux continuously monitors the Git repository . When changes are detected:
+
+1. Flux fetches the latest commit
+2. It diffs the desired state (Git) against the current state (cluster)
+3. It applies the necessary changes (create, update, or delete resources)
+4. It reports health status back in the `flux get kustomizations` output
