@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shelfarr
+  namespace: books
+spec:
+  securityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+  runAsGroup: 1000
+  selector:
+    matchLabels:
+      app: shelfarr
+  template:
+    metadata:
+      labels:
+        app: shelfarr
+    spec:
+      containers:
+        - name: shelfarr
+          image: ghcr.io/pedro-revez-silva/shelfarr:0.39.7
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: data
+              mountPath: /rails/storage
+            - name: audiobooks
+              mountPath: /audiobooks
+            - name: ebooks
+              mountPath: /ebooks
+            - name: downloads
+              mountPath: /downloads
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: CHOWN_ON_START
+              value: "auto"
+            # - name: SHELFARR_SETTING_OIDC_ENABLED
+            #   value: "true"
+            # - name: SHELFARR_SETTING_OIDC_AUTO_REDIRECT
+            #   value: "false"
+            # - name: SHELFARR_SETTING_OIDC_PROVIDER_NAME
+            #   value: "Pocket ID"
+            # - name: SHELFARR_SETTING_OIDC_ISSUER
+            #   value: "https://auth.${domain}"
+            # - name: SHELFARR_SETTING_OIDC_CLIENT_ID
+            #   value: "d9557e11-d879-4bfa-a815-30a737cb24f1"
+            # - name: SHELFARR_SETTING_OIDC_CLIENT_SECRET
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: shelfarr-oidc-secret
+            #       key: client-secret
+            # - name: SHELFARR_SETTING_OIDC_SCOPES
+            #   value: "openid profile email"
+            # - name: SHELFARR_SETTING_OIDC_LINK_EXISTING_USERS
+            #   value: "true"
+            # - name: SHELFARR_SETTING_OIDC_AUTO_CREATE_USERS
+            #   value: "false"
+            # - name: SHELFARR_SETTING_OIDC_DEFAULT_ROLE
+            #   value: "user"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: shelfarr-data
+        - name: audiobooks
+          persistentVolumeClaim:
+            claimName: audiobooks
+        - name: ebooks
+          persistentVolumeClaim:
+            claimName: ebooks
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: downloads

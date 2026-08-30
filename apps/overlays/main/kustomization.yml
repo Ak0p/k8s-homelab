@@ -1,10 +1,2 @@
 resources:
-  - ../../base/immich
-  - ../../base/sftpgo
-  - ../../base/radicale
-  - ../../base/homepage
-  - ../../base/home-assistant
-  - ../../base/actual
-  - ../../base/linkwarden
-  - ../../base/ollama
-  - ../../base/monitoring
+  - ../../base

@@ -5,8 +5,15 @@ metadata:
   name: pocket-id-route
   namespace: traefik
   annotations:
-    external-dns.alpha.kubernetes.io/target: traefik.${domain}
+    external-dns.alpha.kubernetes.io/target: ${main_traefik_ip}
     kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/pod-selector: ""
+    gethomepage.dev/href: "https://auth.${domain}"
+    gethomepage.dev/group: AI & Auth
+    gethomepage.dev/name: Pocket ID
+    gethomepage.dev/icon: sh-pocket-id
+    gethomepage.dev/description: Authentication & SSO
 spec:
   entryPoints:
     - websecure

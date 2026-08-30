@@ -5,8 +5,15 @@ metadata:
   name: immich-route
   namespace: traefik
   annotations:
-    external-dns.alpha.kubernetes.io/target: traefik.${domain}
+    external-dns.alpha.kubernetes.io/target: ${main_traefik_ip}
     kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/pod-selector: ""
+    gethomepage.dev/href: "https://immich.${domain}"
+    gethomepage.dev/group: Media & Storage
+    gethomepage.dev/name: Immich
+    gethomepage.dev/icon: sh-immich
+    gethomepage.dev/description: Photo & Video Library
 spec:
   entryPoints:
     - websecure

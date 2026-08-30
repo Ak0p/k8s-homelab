@@ -1,0 +1,47 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: prowlarr
+  namespace: arr
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: prowlarr
+      version: 22.10.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+  values:
+    workload:
+      main:
+        podSpec:
+          initContainers:
+            fix-permissions:
+              enabled: true
+              type: upgrade
+              image: busybox
+              command: ["sh", "-c", "chown -R 568:568 /config"]
+              volumeMounts:
+                - name: config
+                  mountPath: /config
+              securityContext:
+                runAsUser: 0
+                runAsGroup: 0
+    securityContext:
+      container:
+        runAsUser: 568
+        runAsGroup: 568
+      pod:
+        fsGroup: 568
+        fsGroupChangePolicy: Always
+    persistence:
+      config:
+        enabled: true
+        type: pvc
+        retain: true
+        accessModes: ReadWriteMany
+        size: 300Gi
+        storageClass: host-zfs-files

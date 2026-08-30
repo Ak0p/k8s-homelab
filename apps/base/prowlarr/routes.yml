@@ -1,0 +1,29 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: prowlarr-route
+  namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/target: ${main_traefik_ip}
+    kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/pod-selector: ""
+    gethomepage.dev/href: "https://prowlarr.${domain}"
+    gethomepage.dev/group: Productivity & Tools
+    gethomepage.dev/name: Prowlarr
+    gethomepage.dev/icon: sh-prowlarr
+    gethomepage.dev/description: Indexer Manager
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`prowlarr.${domain}`)
+      services:
+        - kind: Service
+          name: prowlarr
+          namespace: arr
+          port: 9696
+  tls:
+    secretName: wildcard-certificate-secret

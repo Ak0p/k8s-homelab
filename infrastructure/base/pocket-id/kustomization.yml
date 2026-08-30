@@ -3,3 +3,4 @@ resources:
   - repository.yml
   - release.yml
   - routes.yml
+  - pocket-id-secret.yml

@@ -5,8 +5,15 @@ metadata:
   name: radicale-route
   namespace: traefik
   annotations:
-    external-dns.alpha.kubernetes.io/target: traefik.${domain}
+    external-dns.alpha.kubernetes.io/target: ${main_traefik_ip}
     kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/pod-selector: ""
+    gethomepage.dev/href: "https://calendar.${domain}"
+    gethomepage.dev/group: Productivity & Tools
+    gethomepage.dev/name: Radicale
+    gethomepage.dev/icon: radicale
+    gethomepage.dev/description: CalDAV & CardDAV
 spec:
   entryPoints:
     - websecure

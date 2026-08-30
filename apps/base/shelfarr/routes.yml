@@ -1,0 +1,29 @@
+# routes.yml — follows your radicale pattern (IngressRoute lives in traefik ns)
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: shelfarr-route
+  namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/target: ${main_traefik_ip}
+    kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/pod-selector: ""
+    gethomepage.dev/href: "https://shelfarr.${domain}"
+    gethomepage.dev/group: Media & Storage
+    gethomepage.dev/name: Shelfarr
+    gethomepage.dev/icon: sh-shelfarr
+    gethomepage.dev/description: Media Request Manager
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`shelfarr.${domain}`)
+      services:
+        - kind: Service
+          name: shelfarr
+          namespace: books
+          port: 8080
+  tls:
+    secretName: wildcard-certificate-secret

@@ -44,7 +44,7 @@ spec:
           config:
             region: minio
             s3ForcePathStyle: "true"
-            s3Url: https://s3-rustfs.${domain}
+            s3Url: https://s3.rustfs.${domain}
             insecureSkipTLSVerify: "true"
 
       volumeSnapshotLocation:
@@ -60,7 +60,7 @@ spec:
               name: s3-creds
               key: credentials
             s3ForcePathStyle: "true"
-            s3Url: https://s3-rustfs.${domain}
+            s3Url: https://s3.rustfs.${domain}
             insecureSkipTLSVerify: "true"
 
     initContainers:

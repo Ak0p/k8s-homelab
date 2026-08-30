@@ -22,7 +22,38 @@ spec:
             main:
               env:
                 HOMEPAGE_ALLOWED_HOSTS: home.${domain},localhost
-    forceConfigFromValues: true
+                # # Immich API key - create from Immich UI: User Settings > API Keys > server.statistics
+                # HOMEPAGE_CONFIG_IMMICH_KEY: ${homepage_immich_api_key}
+                # # Home Assistant long-lived access token - create from HA UI: Profile > Long-Lived Access Tokens
+                # # HOMEPAGE_CONFIG_HOMEASSISTANT_KEY: "changeme-ha-token"
+                # # Linkwarden API key - create from Linkwarden UI: Settings > Access Tokens
+                # HOMEPAGE_CONFIG_LINKWARDEN_KEY: ${homepage_linkwarden_api_key}
+                # # Grafana admin credentials (from existing SOPS secret)
+                # HOMEPAGE_CONFIG_GRAFANA_USER:
+                #   valueFrom:
+                #     secretKeyRef:
+                #       name: grafana-admin-credentials
+                #       namespace: monitoring
+                #       key: user
+                # HOMEPAGE_CONFIG_GRAFANA_PASS:
+                #   valueFrom:
+                #     secretKeyRef:
+                #       name: grafana-admin-credentials
+                #       namespace: monitoring
+                #       key: password
+                # # AdGuard Home admin credentials (from existing SOPS secret)
+                # HOMEPAGE_CONFIG_ADGUARD_USER:
+                #   valueFrom:
+                #     secretKeyRef:
+                #       name: adguard-configuration
+                #       namespace: adguardhome
+                #       key: user
+                # HOMEPAGE_CONFIG_ADGUARD_PASS:
+                #   valueFrom:
+                #     secretKeyRef:
+                #       name: adguard-configuration
+                #       namespace: adguardhome
+                #       key: password
     persistence:
       config:
         enabled: true
@@ -31,3 +62,169 @@ spec:
         accessModes: ReadWriteMany
         size: 10Gi
         storageClass: host-zfs-files
+    configmap:
+      config:
+        enabled: true
+        data:
+          custom.js: ""
+          custom.css: ""
+          kubernetes.yaml: |
+            ---
+            mode: cluster
+            traefik: true
+          settings.yaml: |
+            ---
+            background:
+              image: https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=2560&q=80
+              blur: sm
+              saturate: 50
+              brightness: 50
+              opacity: 50
+
+            providers:
+              openweathermap: openweathermapapikey
+              weatherapi: weatherapiapikey
+          widgets.yaml: |
+            ---
+            - greeting:
+                text_size: xl
+                text:
+                  - Welcome to your Homelab!
+
+            - datetime:
+                text_size: xl
+                format:
+                  dateStyle: long
+                  timeStyle: short
+
+            - openweathermap:
+                label: Bucharest
+                latitude: 44.4268
+                longitude: 26.1025
+                units: metric
+                cache: 5
+
+            - resources:
+                cpu: true
+                memory: true
+                disk: /
+
+            - search:
+                provider: duckduckgo
+                target: _blank
+          services.yaml: |
+            ---
+            - Infrastructure & Networking:
+                - Traefik:
+                    icon: traefikproxy
+                    href: "http://traefik.${domain}"
+                    description: Ingress Controller
+                    widget:
+                      type: traefik
+                      url: http://traefik.traefik.svc.cluster.local:8080
+                    fields:
+                      routers: true
+                      services: true
+                      middleware: true
+
+                - AdGuard Home:
+                    icon: adguardhome
+                    href: "https://adguardhome.${domain}"
+                    description: DNS & Ad Blocking
+                    widget:
+                      type: adguard
+                      url: http://adguardhome-adguard-home.adguardhome.svc.cluster.local:10232
+                      username: ${HOMEPAGE_CONFIG_ADGUARD_USER}
+                      password: ${HOMEPAGE_CONFIG_ADGUARD_PASS}
+                    fields:
+                      queries: true
+                      blocked: true
+                      filtered: true
+                      latency: true
+
+                - Grafana:
+                    icon: grafana
+                    href: "https://grafana.${domain}"
+                    description: Metrics & Dashboards
+                    widget:
+                      type: grafana
+                      url: http://prometheus-stack-grafana.monitoring.svc.cluster.local:80
+                      username: ${HOMEPAGE_CONFIG_GRAFANA_USER}
+                      password: ${HOMEPAGE_CONFIG_GRAFANA_PASS}
+                      version: 2
+                    fields:
+                      dashboards: true
+                      datasources: true
+                      totalalerts: true
+                      alertstriggered: true
+
+            - Media & Storage:
+                - Immich:
+                    icon: immich
+                    href: "https://immich.${domain}"
+                    description: Photo & Video Library
+                    widget:
+                      type: immich
+                      url: http://immich-server.immich.svc.cluster.local:2283
+                      key: ${HOMEPAGE_CONFIG_IMMICH_KEY}
+                      version: 2
+                    fields:
+                      users: true
+                      photos: true
+                      videos: true
+                      storage: true
+
+                - RustFS S3:
+                    icon: rust
+                    href: "https://s3.rustfs.${domain}"
+                    description: S3-Compatible Object Storage
+
+                - RustFS Dashboard:
+                    icon: rust
+                    href: "https://dash.rustfs.${domain}"
+                    description: Object Storage Management
+
+            - Productivity & Tools:
+                - Linkwarden:
+                    icon: linkwarden
+                    href: "https://linkwarden.${domain}"
+                    description: Bookmark Manager
+                    widget:
+                      type: linkwarden
+                      url: http://linkwarden.linkwarden.svc.cluster.local:2985
+                      key: ${HOMEPAGE_CONFIG_LINKWARDEN_KEY}
+                    fields:
+                      links: true
+                      collections: true
+                      tags: true
+          bookmarks.yaml: |
+            ---
+            - Developer:
+                - Github:
+                    - abbr: GH
+                      href: https://github.com/
+                - Docker Hub:
+                    - abbr: DH
+                      href: https://hub.docker.com/
+
+            - TrueCharts:
+                - TrueCharts:
+                  - abbr: TC
+                    icon: https://trueforge.org/svg/favicon.svg
+                    href: https://truecharts.org
+                    description: "TrueCharts Website"
+                - Github:
+                  - abbr: GH
+                    icon: https://github.com/fluidicon.png
+                    href: https://github.com/truecharts
+                    description: "TrueCharts GitHub"
+                - Open Collective:
+                  - abbr: TC
+                    icon: https://opencollective.com/favicon.ico
+                    href: https://opencollective.com/truecharts
+                    description: "TrueCharts Open Collective"
+                - Discord:
+                  - abbr: DC
+                    icon: https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://discord.com&size=32
+                    href: https://trueforge.org/s/discord
+                    description: "TrueCharts Discord"

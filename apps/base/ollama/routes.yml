@@ -5,8 +5,15 @@ metadata:
   name: ollama-route
   namespace: traefik
   annotations:
-    external-dns.alpha.kubernetes.io/target: traefik.${domain}
+    external-dns.alpha.kubernetes.io/target: ${main_traefik_ip}
     kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/pod-selector: ""
+    gethomepage.dev/href: "https://ollama.${domain}"
+    gethomepage.dev/group: AI & Auth
+    gethomepage.dev/name: Ollama
+    gethomepage.dev/icon: ollama
+    gethomepage.dev/description: Local LLM Inference
 spec:
   entryPoints:
     - websecure

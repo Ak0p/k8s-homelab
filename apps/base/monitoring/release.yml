@@ -19,8 +19,24 @@ spec:
       enabled: false
     grafana:
       enabled: true
+      assertNoLeakedSecrets: false
       admin:
         existingSecret: grafana-admin-credentials
+      grafana.ini:
+        server:
+          domain: grafana.${domain}
+          root_url: https://grafana.${domain}/
+        auth.generic_oauth:
+          enabled: true
+          name: Pocket ID
+          client_id: ${grafana_client_id}
+          client_secret: ${grafana_client_secret}
+          scopes: "openid email profile"
+          auth_url: https://auth.${domain}/authorize
+          token_url: https://auth.${domain}/api/oidc/token
+          auth_style: auto
+          skip_org_role_sync: true
+
     prometheus:
       prometheusSpec:
         initContainers:

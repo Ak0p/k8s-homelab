@@ -15,7 +15,7 @@ patches:
 
   - target:
       kind: L2Advertisement
-      name: traefik
+      name: default
     path: patches/l2-advertisement.yml
   - target:
       kind: IPAddressPool
@@ -24,7 +24,7 @@ patches:
       - op: replace
         path: /spec/addresses
         value:
-          - 192.168.1.80/28
+          - ${backup_traefik_ip}/32
 
   - target:
       kind: StorageClass
@@ -50,10 +50,10 @@ patches:
         path: /spec/values/txtOwnerId
         value: backup-cluster
 
-  - target:
-      kind: Secret
-      name: adguard-configuration
-    patch: |-
-      - op: replace
-        path: /spec/stringData/url
-        value: adguardhome.${domain}
+  # - target:
+  #     kind: Secret
+  #     name: adguard-configuration
+  #   patch: |-
+  #     - op: replace
+  #       path: /spec/stringData/url
+  #       value: adguardhome.${domain}

@@ -5,8 +5,9 @@ metadata:
   name: home-assistant-route
   namespace: traefik
   annotations:
-    external-dns.alpha.kubernetes.io/target: traefik.${domain}
+    external-dns.alpha.kubernetes.io/target: ${main_traefik_ip}
     kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "false"
 spec:
   entryPoints:
     - websecure

@@ -4,8 +4,15 @@ metadata:
   name: sftpgo-webdav-route
   namespace: traefik
   annotations:
-    external-dns.alpha.kubernetes.io/target: traefik.${domain}
+    external-dns.alpha.kubernetes.io/target: ${main_traefik_ip}
     kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/pod-selector: ""
+    gethomepage.dev/href: "https://dav.sftpgo.${domain}"
+    gethomepage.dev/group: Media & Storage
+    gethomepage.dev/name: SFTPGo WebDAV
+    gethomepage.dev/icon: sftpgo
+    gethomepage.dev/description: WebDAV File Access
 spec:
   entryPoints:
     - websecure
@@ -26,8 +33,15 @@ metadata:
   name: sftpgo-admin-route
   namespace: traefik
   annotations:
-    external-dns.alpha.kubernetes.io/target: traefik.${domain}
+    external-dns.alpha.kubernetes.io/target: ${main_traefik_ip}
     kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/pod-selector: ""
+    gethomepage.dev/href: "https://dash.sftpgo.${domain}"
+    gethomepage.dev/group: Media & Storage
+    gethomepage.dev/name: SFTPGo Admin
+    gethomepage.dev/icon: sftpgo
+    gethomepage.dev/description: SFTP Server Management
 spec:
   entryPoints:
     - websecure

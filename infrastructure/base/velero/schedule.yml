@@ -8,6 +8,9 @@ spec:
   template:
     includedNamespaces:
       - "*"
+    includedResources:
+      - persistentvolumeclaims
+      - persistentvolumes
     snapshotVolumes: true
     snapshotMoveData: true
     ttl: 720h0m0s

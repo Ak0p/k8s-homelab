@@ -3,10 +3,17 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: grafana-route
-  namespace: monitoring
+  namespace: traefik
   annotations:
-    external-dns.alpha.kubernetes.io/target: traefik.${domain}
+    external-dns.alpha.kubernetes.io/target: ${main_traefik_ip}
     kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/pod-selector: ""
+    gethomepage.dev/href: "https://grafana.${domain}"
+    gethomepage.dev/group: Media & Storage
+    gethomepage.dev/name: Grafana
+    gethomepage.dev/icon: sh-grafana
+    gethomepage.dev/description: Metrics & Dashboards
 spec:
   entryPoints:
     - websecure

@@ -8,32 +8,29 @@ spec:
     chart:
         spec:
             chart: pocket-id
-            version: 2.4.0
+            version: 1.0.0
             sourceRef:
                 kind: HelmRepository
-                name: pocket-id
-                namespace: pocket-id
+                name: truecharts
+                namespace: flux-system
     interval: 60m
     values:
-        image:
-            tag: v2.4.0
         persistence:
-            storageClass: host-zfs-standard
-        config:
-            appUrl: https://auth.${domain}
-            encryptionKey: ENC[AES256_GCM,data:aSunL6CfpJ+5p1leOdlFWkhpFM8KBAiZVp/1Ucv1PiJe9COhRuu1iRH8szU=,iv:oKGL0mCbkVHxJZksrz/gnxiTPtIUFMs42P2nK4CWroo=,tag:MN8BkjkTlTakuhWuCCjoGQ==,type:str]
-sops:
-    age:
-        - recipient: age1e8fc5nkphytyt3m2cj0g4th6cxx643pthwyq6xvha28jkpy27clq8uyax7
-          enc: |
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBLNG1uUTNUaHkxQ3NQdmtJ
-            TlF5M3N5TDhYYXlUaC8rVlRUbHRua2UzempVClE2RVl6TktlUHlxTVVTMGFPU0x5
-            TXZUN2F0aGoyRmZkVHFkSG1FWCtHV3MKLS0tIHh5ZXd2Q0U5SVJzUmw3My9wbFRD
-            S21SZmxhR3J5U3g0clh0RnN3UVpDWmsKpX8Jp2uZX5XhswhMSTcd7HFeY8S/1q2F
-            AaO7AsOh1SSE23Ki73jxckogkiA3ro2PN2UFCLPXrWpMT1t6lmvGwQ==
-            -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-05-24T06:45:59Z"
-    mac: ENC[AES256_GCM,data:qS/WGx3BBvUXry4nnhbMB423Q4AuBfg7/bNpWQdrcOFPHPY8wAYFBqPkcNNpwalKiCLI9pJURPwJWsnLQqDJQgkPxHXVebOoMdusNZ12GFlFIZ9bSA79m3VpcCKzLSaNXuQqoGGzeqDmvagSMO/NUns9k+rXr43vtivEF4scrZQ=,iv:AJsS07BtuqksK18cP2W7e7j+I3KI48ghoDU58YJ5Vw0=,tag:+ixKwbSHrwccY7kaNeNrYw==,type:str]
-    encrypted_regex: ^(data|stringData|encryptionKey)$
-    version: 3.12.2
+            data:
+                enabled: true
+                storageClass: host-zfs-standard
+                type: pvc
+                size: 5Gi
+                retain: true
+        workload:
+            main:
+                podSpec:
+                    containers:
+                        main:
+                            env:
+                                APP_URL: https://auth.${domain}
+                                ENCRYPTION_KEY:
+                                    secretKeyRef:
+                                        name: pocket-id
+                                        key: encryption-key
+                                        expandObjectName: false
